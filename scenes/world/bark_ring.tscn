@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Yarn"]
+shading_mode = 0
+albedo_color = Color(0.97, 0.88, 0.70, 1)
+
+[sub_resource type="TorusMesh" id="Ring"]
+material = SubResource("Yarn")
+inner_radius = 0.95
+outer_radius = 1.0
+rings = 48
+ring_segments = 6
+
+[sub_resource type="Animation" id="Bark"]
+resource_name = "bark"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/keys = {"times": PackedFloat32Array(0,0.7), "transitions": PackedFloat32Array(1,1), "update": 1, "values": [true,false]}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:scale")
+tracks/1/keys = {"times": PackedFloat32Array(0,0.7), "transitions": PackedFloat32Array(1,1), "update": 0, "values": [Vector3(1,0.5,1),Vector3(4.5,0.5,4.5)]}
+[sub_resource type="AnimationLibrary" id="Library"]
+_data = {"bark": SubResource("Bark")}
+[node name="BarkRing" type="MeshInstance3D"]
+visible = false
+mesh = SubResource("Ring")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {&"": SubResource("Library")}

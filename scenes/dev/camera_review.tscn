@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://ds81e005itvwy"]
+
+[ext_resource type="PackedScene" path="res://scenes/pasture.tscn" id="1"]
+[ext_resource type="Script" uid="uid://c52i1bso0qfq8" path="res://scripts/dev/camera_review.gd" id="2"]
+
+[node name="TaiganReview" unique_id=310420969 instance=ExtResource("1")]
+
+[node name="Level" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.1803365, 1.9371159, -0.17781675)
+
+[node name="Camera" parent="." index="2"]
+transform = Transform3D(0.70710677, -0.40824828, 0.57735026, 0, 0.8164966, 0.57735026, -0.70710677, -0.40824828, 0.57735026, 24, 24, 24)
+
+[node name="ClothGround" parent="." index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.64, 0)
+
+[node name="Review" type="Node" parent="." index="8" unique_id=1495231950]
+script = ExtResource("2")
+autorun = true

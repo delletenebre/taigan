@@ -1,0 +1,222 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/sheep_merino_v1.png" id="Wool"]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/felt_flame.obj" id="Flame"]
+
+[sub_resource type="StandardMaterial3D" id="Orange"]
+albedo_color = Color(0.92,0.23,0.045,1)
+albedo_texture = ExtResource("Wool")
+roughness = 1.0
+metallic_specular = 0.0
+emission_enabled = true
+emission = Color(0.8,0.13,0.015,1)
+emission_energy_multiplier = 0.42
+uv1_scale = Vector3(2,2,2)
+
+[sub_resource type="StandardMaterial3D" id="Gold"]
+albedo_color = Color(1,0.64,0.18,1)
+albedo_texture = ExtResource("Wool")
+roughness = 1.0
+metallic_specular = 0.0
+emission_enabled = true
+emission = Color(1,0.34,0.04,1)
+emission_energy_multiplier = 0.42
+uv1_scale = Vector3(2,2,2)
+
+[sub_resource type="StandardMaterial3D" id="Charcoal"]
+albedo_color = Color(0.09,0.055,0.038,1)
+albedo_texture = ExtResource("Wool")
+roughness = 1.0
+metallic_specular = 0.0
+uv1_triplanar = true
+uv1_scale = Vector3(7,7,7)
+
+[sub_resource type="StandardMaterial3D" id="Stone"]
+albedo_color = Color(0.26,0.25,0.22,1)
+albedo_texture = ExtResource("Wool")
+roughness = 1.0
+metallic_specular = 0.0
+uv1_triplanar = true
+uv1_scale = Vector3(7,7,7)
+
+[sub_resource type="CapsuleMesh" id="Log"]
+material = SubResource("Charcoal")
+radius = 0.035
+height = 0.47
+radial_segments = 16
+rings = 8
+
+[sub_resource type="SphereMesh" id="StoneMesh"]
+material = SubResource("Stone")
+radius = 0.11
+height = 0.16
+radial_segments = 20
+rings = 12
+
+[sub_resource type="CylinderMesh" id="Ash"]
+material = SubResource("Charcoal")
+top_radius = 0.285
+bottom_radius = 0.30
+height = 0.018
+radial_segments = 32
+
+[sub_resource type="Animation" id="Reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("FireEffect:visible")
+tracks/0/interp = 1
+tracks/0/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 1, "values": [false]}
+tracks/1/type = "value"
+tracks/1/path = NodePath("FireEffect:scale")
+tracks/1/interp = 1
+tracks/1/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 0, "values": [Vector3(0.001,0.001,0.001)]}
+
+[sub_resource type="Animation" id="Ignite"]
+length = 2.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("FireEffect:visible")
+tracks/0/interp = 1
+tracks/0/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 1, "values": [true]}
+tracks/1/type = "value"
+tracks/1/path = NodePath("FireEffect:scale")
+tracks/1/interp = 1
+tracks/1/keys = {"times": PackedFloat32Array(0,0.45,1.4,2.5), "transitions": PackedFloat32Array(1,1,1,1), "update": 0, "values": [Vector3(0.001,0.001,0.001), Vector3(0.45,0.35,0.45), Vector3(0.9,0.76,0.9), Vector3(1,1,1)]}
+
+[sub_resource type="Animation" id="Flicker"]
+length = 1.8
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Warmth:light_energy")
+tracks/0/interp = 1
+tracks/0/keys = {"times": PackedFloat32Array(0,0.23,0.51,0.78,1.08,1.42,1.8), "transitions": PackedFloat32Array(1,1,1,1,1,1,1), "update": 0, "values": [1.05, 1.19, 1.08, 1.24, 1.10, 1.18, 1.05]}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Flames:scale")
+tracks/1/interp = 1
+tracks/1/keys = {"times": PackedFloat32Array(0,0.23,0.51,0.78,1.08,1.42,1.8), "transitions": PackedFloat32Array(1,1,1,1,1,1,1), "update": 0, "values": [Vector3(1,0.92,1), Vector3(0.96,1.07,1), Vector3(1.02,0.97,0.97), Vector3(0.96,1.09,1), Vector3(1,0.95,1.02), Vector3(0.98,1.04,1), Vector3(1,0.92,1)]}
+
+[sub_resource type="AnimationLibrary" id="IgnitionLibrary"]
+_data = {&"RESET": SubResource("Reset"), &"ignite": SubResource("Ignite")}
+
+[sub_resource type="AnimationLibrary" id="FlickerLibrary"]
+_data = {&"flicker": SubResource("Flicker")}
+
+[node name="Campfire" type="Node3D"]
+
+[node name="Ash" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.01,0)
+mesh = SubResource("Ash")
+
+[node name="HearthStone0" type="MeshInstance3D" parent="."]
+position = Vector3(0.2500,0.08,0.0000)
+rotation = Vector3(0,0.0,0.10)
+scale = Vector3(1.2,1,0.85)
+mesh = SubResource("StoneMesh")
+
+[node name="HearthStone1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.1250,0.08,0.2165)
+rotation = Vector3(0,2.0943951023931953,0.10)
+scale = Vector3(1.2,1,0.85)
+mesh = SubResource("StoneMesh")
+
+[node name="HearthStone2" type="MeshInstance3D" parent="."]
+position = Vector3(-0.1250,0.08,-0.2165)
+rotation = Vector3(0,4.1887902047863905,0.10)
+scale = Vector3(1.2,1,0.85)
+mesh = SubResource("StoneMesh")
+
+[node name="FeltLog0" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.040,0)
+rotation = Vector3(0,0.45,1.5708)
+mesh = SubResource("Log")
+
+[node name="FeltLog1" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.054,0)
+rotation = Vector3(0,2.1,1.5708)
+mesh = SubResource("Log")
+
+[node name="FeltLog2" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.068,0)
+rotation = Vector3(0,-0.5,1.5708)
+mesh = SubResource("Log")
+
+[node name="FireEffect" type="Node3D" parent="."]
+visible = false
+scale = Vector3(0.001,0.001,0.001)
+
+[node name="Flames" type="Node3D" parent="FireEffect"]
+position = Vector3(0,0.06,0)
+
+[node name="FeltFlame0" type="MeshInstance3D" parent="FireEffect/Flames"]
+position = Vector3(0.1300,0,0.0000)
+rotation = Vector3(0,0.0,0)
+scale = Vector3(1,0.4028,1)
+mesh = ExtResource("Flame")
+material_override = SubResource("Gold")
+cast_shadow = 0
+
+[node name="FeltFlame1" type="MeshInstance3D" parent="FireEffect/Flames"]
+position = Vector3(0.0811,0,0.1016)
+rotation = Vector3(0,0.8975979010256552,0)
+scale = Vector3(1,0.4770,1)
+mesh = ExtResource("Flame")
+material_override = SubResource("Orange")
+cast_shadow = 0
+
+[node name="FeltFlame2" type="MeshInstance3D" parent="FireEffect/Flames"]
+position = Vector3(-0.0289,0,0.1267)
+rotation = Vector3(0,1.7951958020513104,0)
+scale = Vector3(1,0.5512,1)
+mesh = ExtResource("Flame")
+material_override = SubResource("Orange")
+cast_shadow = 0
+
+[node name="FeltFlame3" type="MeshInstance3D" parent="FireEffect/Flames"]
+position = Vector3(-0.1171,0,0.0564)
+rotation = Vector3(0,2.6927937030769655,0)
+scale = Vector3(1,0.4028,1)
+mesh = ExtResource("Flame")
+material_override = SubResource("Gold")
+cast_shadow = 0
+
+[node name="FeltFlame4" type="MeshInstance3D" parent="FireEffect/Flames"]
+position = Vector3(-0.1171,0,-0.0564)
+rotation = Vector3(0,3.5903916041026207,0)
+scale = Vector3(1,0.4770,1)
+mesh = ExtResource("Flame")
+material_override = SubResource("Orange")
+cast_shadow = 0
+
+[node name="FeltFlame5" type="MeshInstance3D" parent="FireEffect/Flames"]
+position = Vector3(-0.0289,0,-0.1267)
+rotation = Vector3(0,4.487989505128276,0)
+scale = Vector3(1,0.5512,1)
+mesh = ExtResource("Flame")
+material_override = SubResource("Orange")
+cast_shadow = 0
+
+[node name="FeltFlame6" type="MeshInstance3D" parent="FireEffect/Flames"]
+position = Vector3(0.0000,0,-0.0000)
+rotation = Vector3(0,5.385587406153931,0)
+scale = Vector3(1,0.4028,1)
+mesh = ExtResource("Flame")
+material_override = SubResource("Gold")
+cast_shadow = 0
+
+[node name="Warmth" type="OmniLight3D" parent="FireEffect"]
+position = Vector3(0,0.12,0)
+light_color = Color(1,0.56,0.26,1)
+light_energy = 1.05
+light_size = 0.20
+omni_range = 3.2
+omni_attenuation = 1.4
+shadow_enabled = true
+shadow_bias = 0.03
+shadow_normal_bias = 0.1
+
+[node name="Flicker" type="AnimationPlayer" parent="FireEffect"]
+autoplay = "flicker"
+libraries = {&"": SubResource("FlickerLibrary")}
+
+[node name="Ignition" type="AnimationPlayer" parent="."]
+libraries = {&"": SubResource("IgnitionLibrary")}

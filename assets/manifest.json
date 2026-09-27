@@ -1,0 +1,473 @@
+[
+  {
+    "id": "sheep_ivory",
+    "category": "animal",
+    "source_triangles": 121732,
+    "game_simplification": 1.0,
+    "parts": [
+      "Body",
+      "Head",
+      "FrontLeft",
+      "RearLeft",
+      "FrontRight",
+      "RearRight"
+    ],
+    "file": "assets/models/sheep_ivory.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "sheep_whiteface",
+    "category": "animal",
+    "source_triangles": 121732,
+    "game_simplification": 1.0,
+    "parts": [
+      "Body.001",
+      "Head.001",
+      "FrontLeft.001",
+      "RearLeft.001",
+      "FrontRight.001",
+      "RearRight.001"
+    ],
+    "file": "assets/models/sheep_whiteface.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "taigan_dog",
+    "category": "animal",
+    "source_triangles": 194748,
+    "game_simplification": 1.0,
+    "parts": [
+      "Body.002",
+      "Head.002",
+      "FrontLeft.002",
+      "RearLeft.002",
+      "FrontRight.002",
+      "RearRight.002",
+      "Tail"
+    ],
+    "file": "assets/models/taigan_dog.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "wolf_gray",
+    "category": "animal",
+    "source_triangles": 171436,
+    "game_simplification": 1.0,
+    "parts": [
+      "Body.003",
+      "Head.003",
+      "FrontLeft.003",
+      "RearLeft.003",
+      "FrontRight.003",
+      "RearRight.003",
+      "Tail.001"
+    ],
+    "file": "assets/models/wolf_gray.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "wall_straight_3m",
+    "category": "architecture",
+    "source_triangles": 10464,
+    "game_simplification": 1.0,
+    "parts": [
+      "Stonework"
+    ],
+    "file": "assets/models/wall_straight_3m.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "wall_curve_3m",
+    "category": "architecture",
+    "source_triangles": 10464,
+    "game_simplification": 1.0,
+    "parts": [
+      "Stonework.001"
+    ],
+    "file": "assets/models/wall_curve_3m.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "gate_openable",
+    "category": "architecture",
+    "source_triangles": 12264,
+    "game_simplification": 1.0,
+    "parts": [
+      "Posts",
+      "GateLeft",
+      "GateRight"
+    ],
+    "file": "assets/models/gate_openable.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "bridge_rope_4m",
+    "category": "architecture",
+    "source_triangles": 69664,
+    "game_simplification": 1.0,
+    "parts": [
+      "Bridge"
+    ],
+    "file": "assets/models/bridge_rope_4m.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "yurt_embroidered",
+    "category": "architecture",
+    "source_triangles": 120272,
+    "game_simplification": 1.0,
+    "parts": [
+      "Yurt"
+    ],
+    "file": "assets/models/yurt_embroidered.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "kazan_felt",
+    "category": "prop",
+    "source_triangles": 64428,
+    "game_simplification": 1.0,
+    "parts": [
+      "FeltCauldron"
+    ],
+    "file": "assets/models/kazan_felt.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "barrel_large",
+    "category": "prop",
+    "source_triangles": 15888,
+    "game_simplification": 1.0,
+    "parts": [
+      "Barrel"
+    ],
+    "file": "assets/models/barrel_large.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "barrel_small",
+    "category": "prop",
+    "source_triangles": 15888,
+    "game_simplification": 1.0,
+    "parts": [
+      "Barrel.001"
+    ],
+    "file": "assets/models/barrel_small.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "rug_shyrdak",
+    "category": "prop",
+    "source_triangles": 59696,
+    "game_simplification": 1.0,
+    "parts": [
+      "PlainFeltMat"
+    ],
+    "file": "assets/models/rug_shyrdak.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "boulder_large",
+    "category": "prop",
+    "source_triangles": 186880,
+    "game_simplification": 1.0,
+    "parts": [
+      "FeltStone"
+    ],
+    "file": "assets/models/boulder_large.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "boulder_medium",
+    "category": "prop",
+    "source_triangles": 186880,
+    "game_simplification": 1.0,
+    "parts": [
+      "FeltStone.001"
+    ],
+    "file": "assets/models/boulder_medium.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "pebbles",
+    "category": "prop",
+    "source_triangles": 186880,
+    "game_simplification": 1.0,
+    "parts": [
+      "FeltStone.002"
+    ],
+    "file": "assets/models/pebbles.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "shrub_pine",
+    "category": "foliage",
+    "source_triangles": 165024,
+    "game_simplification": 1.0,
+    "parts": [
+      "Shrub"
+    ],
+    "file": "assets/models/shrub_pine.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "shrub_teal",
+    "category": "foliage",
+    "source_triangles": 165024,
+    "game_simplification": 1.0,
+    "parts": [
+      "Shrub.001"
+    ],
+    "file": "assets/models/shrub_teal.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "shrub_ochre",
+    "category": "foliage",
+    "source_triangles": 165024,
+    "game_simplification": 1.0,
+    "parts": [
+      "Shrub.002"
+    ],
+    "file": "assets/models/shrub_ochre.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "shrub_rust",
+    "category": "foliage",
+    "source_triangles": 165024,
+    "game_simplification": 1.0,
+    "parts": [
+      "Shrub.003"
+    ],
+    "file": "assets/models/shrub_rust.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "grass_tuft",
+    "category": "foliage",
+    "source_triangles": 722,
+    "game_simplification": 1.0,
+    "parts": [
+      "Leaves"
+    ],
+    "file": "assets/models/grass_tuft.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "river_reeds",
+    "category": "foliage",
+    "source_triangles": 2760,
+    "game_simplification": 1.0,
+    "parts": [
+      "Leaves.001"
+    ],
+    "file": "assets/models/river_reeds.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "flowers_daisy",
+    "category": "foliage",
+    "source_triangles": 8376,
+    "game_simplification": 1.0,
+    "parts": [
+      "Flowers"
+    ],
+    "file": "assets/models/flowers_daisy.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "meadow_tile_4m",
+    "category": "terrain",
+    "source_triangles": 6768,
+    "game_simplification": 1.0,
+    "parts": [
+      "FeltTile"
+    ],
+    "file": "assets/models/meadow_tile_4m.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "sage_tile_4m",
+    "category": "terrain",
+    "source_triangles": 6768,
+    "game_simplification": 1.0,
+    "parts": [
+      "FeltTile.001"
+    ],
+    "file": "assets/models/sage_tile_4m.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "path_tile_4m",
+    "category": "terrain",
+    "source_triangles": 6768,
+    "game_simplification": 1.0,
+    "parts": [
+      "FeltTile.002"
+    ],
+    "file": "assets/models/path_tile_4m.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "cliff_embroidered_4m",
+    "category": "terrain",
+    "source_triangles": 10416,
+    "game_simplification": 1.0,
+    "parts": [
+      "Cliff"
+    ],
+    "file": "assets/models/cliff_embroidered_4m.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "river_straight_4m",
+    "category": "terrain",
+    "source_triangles": 9536,
+    "game_simplification": 1.0,
+    "parts": [
+      "River"
+    ],
+    "file": "assets/models/river_straight_4m.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "river_bend_4m",
+    "category": "terrain",
+    "source_triangles": 9536,
+    "game_simplification": 1.0,
+    "parts": [
+      "River.001"
+    ],
+    "file": "assets/models/river_bend_4m.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "mountain_felt_peak",
+    "category": "terrain",
+    "source_triangles": 728,
+    "game_simplification": 1.0,
+    "parts": [
+      "Peak"
+    ],
+    "file": "assets/models/mountain_felt_peak.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "leather_badge",
+    "category": "prop",
+    "source_triangles": 2048,
+    "game_simplification": 1.0,
+    "parts": [
+      "Badge"
+    ],
+    "file": "assets/models/leather_badge.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "valley_landform",
+    "category": "terrain",
+    "source_triangles": 600168,
+    "game_simplification": 1.0,
+    "parts": [
+      "Meadow",
+      "EmbroideredCliffs",
+      "SurfaceWool",
+      "PatchStitching"
+    ],
+    "file": "assets/models/valley_landform.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "valley_river",
+    "category": "terrain",
+    "source_triangles": 90158,
+    "game_simplification": 1.0,
+    "parts": [
+      "WoolWaterAndBanks"
+    ],
+    "file": "assets/models/valley_river.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "hay_bale",
+    "category": "prop",
+    "source_triangles": 31800,
+    "game_simplification": 1.0,
+    "parts": [
+      "Bale"
+    ],
+    "file": "assets/models/hay_bale.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "wooden_trough",
+    "category": "prop",
+    "source_triangles": 4608,
+    "game_simplification": 1.0,
+    "parts": [
+      "Trough"
+    ],
+    "file": "assets/models/wooden_trough.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "felt_lantern",
+    "category": "prop",
+    "source_triangles": 2104,
+    "game_simplification": 1.0,
+    "parts": [
+      "Lantern"
+    ],
+    "file": "assets/models/felt_lantern.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  },
+  {
+    "id": "pen_round_5m",
+    "category": "architecture",
+    "source_triangles": 93856,
+    "game_simplification": 1.0,
+    "parts": [
+      "StoneCircle"
+    ],
+    "file": "assets/models/pen_round_5m.glb",
+    "units": "meters",
+    "lod": "Godot automatic LOD on import"
+  }
+]
