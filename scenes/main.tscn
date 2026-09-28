@@ -1,0 +1,30 @@
+[gd_scene load_steps=10 format=3]
+[ext_resource type="Script" path="res://scripts/game.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/levels/pasture.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="3"]
+[ext_resource type="AudioStream" path="res://assets/audio/bark.wav" id="4"]
+[ext_resource type="AudioStream" path="res://assets/audio/howl.wav" id="5"]
+[ext_resource type="AudioStream" path="res://assets/audio/pen.wav" id="6"]
+[ext_resource type="AudioStream" path="res://assets/audio/win.wav" id="7"]
+[ext_resource type="AudioStream" path="res://assets/audio/lose.wav" id="8"]
+[sub_resource type="World2D" id="World"]
+[node name="Taigan" type="Node2D"]
+script = ExtResource("1")
+[node name="Pasture" parent="." instance=ExtResource("2")]
+[node name="HUD" type="CanvasLayer" parent="."]
+[node name="Interface" parent="HUD" instance=ExtResource("3")]
+[node name="BarkSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4")
+volume_db = -8.0
+[node name="HowlSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5")
+volume_db = -8.0
+[node name="PenSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6")
+volume_db = -8.0
+[node name="WinSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7")
+volume_db = -8.0
+[node name="LoseSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8")
+volume_db = -8.0

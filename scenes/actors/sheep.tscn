@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3]
+[ext_resource type="Script" path="res://scripts/sheep.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/sheep-variants.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/ui/blob_shadow.png" id="3"]
+[ext_resource type="SpriteFrames" path="res://assets/animations/sheep_ivory_trot.tres" id="4"]
+[sub_resource type="CircleShape2D" id="Footprint"]
+radius = 9.0
+[node name="Sheep" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1")
+species = "sheep"
+speed = 62.0
+atlas_row = 0
+atlas_columns = 4
+atlas_rows = 3
+art_width = 64.0
+trot_scales = PackedFloat32Array(0.243177316793495, 0.246880784502127, 0.244940507215082, 0.230974870789521)
+frame_feet_y = PackedFloat32Array(332, 346, 338, 332)
+idle_offsets_x = PackedFloat32Array(-3.00552486187845, -1.94475138121547, -0.353591160220994, 1.23756906077348)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("Footprint")
+[node name="Shadow" type="Sprite2D" parent="."]
+position = Vector2(0, -2)
+scale = Vector2(0.24, 0.13)
+texture = ExtResource("3")
+modulate = Color(0.35, 0.29, 0.17, 0.48)
+[node name="Visual" type="Node2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="Visual"]
+position = Vector2(0, -27.4033)
+scale = Vector2(0.17679558011049723, 0.17679558011049723)
+texture = ExtResource("2")
+region_enabled = true
+region_rect = Rect2(0, 0, 362, 362)
+region_filter_clip_enabled = true
+[node name="Trot" type="AnimatedSprite2D" parent="Visual"]
+visible = false
+sprite_frames = ExtResource("4")
+animation = &"trot_down_diagonal"
+[node name="Reaction" type="Node2D" parent="."]
+visible = false
+position = Vector2(0, -65)
+[node name="Stitch1" type="Line2D" parent="Reaction"]
+points = PackedVector2Array(-20, 4, -25, -3)
+width = 2.5
+default_color = Color(0.96, 0.91, 0.75, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+[node name="Stitch2" type="Line2D" parent="Reaction"]
+points = PackedVector2Array(-10, 0, -12, -9)
+width = 2.5
+default_color = Color(0.96, 0.91, 0.75, 1)
+begin_cap_mode = 2
+end_cap_mode = 2

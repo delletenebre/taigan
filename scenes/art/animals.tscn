@@ -1,0 +1,123 @@
+[gd_scene load_steps=7 format=3]
+[ext_resource type="Script" path="res://scripts/dev/art_review.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/actors/sheep_ivory.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/actors/sheep_cream.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/actors/sheep_spotted.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/actors/wolf.tscn" id="5"]
+[ext_resource type="FontFile" path="res://assets/fonts/PT_Sans-Web-Regular.ttf" id="6"]
+[node name="AnimalReview" type="Node2D"]
+script = ExtResource("1")
+[node name="Backdrop" type="ColorRect" parent="."]
+offset_right = 819.0
+offset_bottom = 1456.0
+color = Color(0.73, 0.66, 0.55, 1)
+mouse_filter = 2
+[node name="Title" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 32.0
+offset_right = 779.0
+offset_bottom = 85.0
+theme_override_fonts/font = ExtResource("6")
+theme_override_font_sizes/font_size = 38
+theme_override_colors/font_color = Color(0.19, 0.16, 0.12, 1)
+text = "Войлочные персонажи"
+[node name="Label0" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 160.0
+offset_right = 779.0
+offset_bottom = 202.0
+theme_override_fonts/font = ExtResource("6")
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0.19, 0.16, 0.12, 1)
+text = "Белая · чёрная мордочка"
+[node name="Animal0_0" parent="." instance=ExtResource("2")]
+position = Vector2(110, 380)
+scale = Vector2(2.4, 2.4)
+initial_direction = 0
+[node name="Animal0_1" parent="." instance=ExtResource("2")]
+position = Vector2(310, 380)
+scale = Vector2(2.4, 2.4)
+initial_direction = 1
+[node name="Animal0_2" parent="." instance=ExtResource("2")]
+position = Vector2(510, 380)
+scale = Vector2(2.4, 2.4)
+initial_direction = 2
+[node name="Animal0_3" parent="." instance=ExtResource("2")]
+position = Vector2(710, 380)
+scale = Vector2(2.4, 2.4)
+initial_direction = 3
+[node name="Label1" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 460.0
+offset_right = 779.0
+offset_bottom = 502.0
+theme_override_fonts/font = ExtResource("6")
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0.19, 0.16, 0.12, 1)
+text = "Кремовая · светлая мордочка"
+[node name="Animal1_0" parent="." instance=ExtResource("3")]
+position = Vector2(110, 680)
+scale = Vector2(2.4, 2.4)
+initial_direction = 0
+[node name="Animal1_1" parent="." instance=ExtResource("3")]
+position = Vector2(310, 680)
+scale = Vector2(2.4, 2.4)
+initial_direction = 1
+[node name="Animal1_2" parent="." instance=ExtResource("3")]
+position = Vector2(510, 680)
+scale = Vector2(2.4, 2.4)
+initial_direction = 2
+[node name="Animal1_3" parent="." instance=ExtResource("3")]
+position = Vector2(710, 680)
+scale = Vector2(2.4, 2.4)
+initial_direction = 3
+[node name="Label2" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 760.0
+offset_right = 779.0
+offset_bottom = 802.0
+theme_override_fonts/font = ExtResource("6")
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0.19, 0.16, 0.12, 1)
+text = "Пятнистая · тёмные уши"
+[node name="Animal2_0" parent="." instance=ExtResource("4")]
+position = Vector2(110, 980)
+scale = Vector2(2.4, 2.4)
+initial_direction = 0
+[node name="Animal2_1" parent="." instance=ExtResource("4")]
+position = Vector2(310, 980)
+scale = Vector2(2.4, 2.4)
+initial_direction = 1
+[node name="Animal2_2" parent="." instance=ExtResource("4")]
+position = Vector2(510, 980)
+scale = Vector2(2.4, 2.4)
+initial_direction = 2
+[node name="Animal2_3" parent="." instance=ExtResource("4")]
+position = Vector2(710, 980)
+scale = Vector2(2.4, 2.4)
+initial_direction = 3
+[node name="Label3" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 1060.0
+offset_right = 779.0
+offset_bottom = 1102.0
+theme_override_fonts/font = ExtResource("6")
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0.19, 0.16, 0.12, 1)
+text = "Волк · вытянутый силуэт"
+[node name="Animal3_0" parent="." instance=ExtResource("5")]
+position = Vector2(110, 1280)
+scale = Vector2(2.4, 2.4)
+initial_direction = 0
+[node name="Animal3_1" parent="." instance=ExtResource("5")]
+position = Vector2(310, 1280)
+scale = Vector2(2.4, 2.4)
+initial_direction = 1
+[node name="Animal3_2" parent="." instance=ExtResource("5")]
+position = Vector2(510, 1280)
+scale = Vector2(2.4, 2.4)
+initial_direction = 2
+[node name="Animal3_3" parent="." instance=ExtResource("5")]
+position = Vector2(710, 1280)
+scale = Vector2(2.4, 2.4)
+initial_direction = 3

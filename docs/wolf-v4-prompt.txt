@@ -1,0 +1,3 @@
+Built-in image_gen; source: assets/art/wolf-v3.png
+
+Use case: precise-object-edit. Edit the wolf-v3 transparent 2x2 sprite atlas. Increase torso girth about 12-15%, round the tummy, back and rump gently, and soften the shoulders. Preserve the elongated body, slender legs, small paws, narrow ivory muzzle, head size, ears, tail and gray-brown palette. Soften the eyelids slightly for a mildly grumpy, endearing felt toy wolf. Preserve the original layout, four orientations, image dimensions, positions, foot contact lines, scale, camera and lighting. Keep transparent alpha and margins. No shadows, text, scenery or extra sprites. This is a reconstruction of the request; the earlier saved prompt was empty.

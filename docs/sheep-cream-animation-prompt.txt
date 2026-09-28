@@ -1,0 +1,12 @@
+Built-in image_gen.
+
+Use case: stylized-concept. Production Godot 2D animation sprite atlas of ONE specific felt sheep from the reference, with a joyful bouncy little trot.
+CHARACTER: SECOND/MIDDLE ROW of the reference: warm cream round wool body, pale beige face, black nose and eyes, charcoal ears and short legs. No patches.
+Preserve the reference sheep's exact identity, round plump wool body size, small head, black bead eyes, tiny ears, short hooves, toy proportions, dense handmade needle-felted wool texture and warm lighting. It is a cute felt miniature, not a living photorealistic sheep. No mouth grin, cartoon eyes or accessories.
+ATLAS: EXACTLY SIX COLUMNS by FOUR ROWS, 24 separate full-body poses total, true transparent alpha. Landscape 3:2 canvas, requested 3072x2048. Equal square cells with generous 12 percent transparent padding on every side of each silhouette. Uniform sheep scale in all rows/frames. Feet never cross cell borders, no parts of neighbors in another cell. No baked shadows, floor, labels, numbers or grid lines.
+Each ROW is a complete SIX-FRAME looping cheerful trot of the SAME sheep in one fixed direction, from the same elevated isometric camera 35 degrees downward:
+ROW 1: faces diagonally down-right, front three-quarter, matching reference COLUMN 1.
+ROW 2: faces diagonally up-left away from viewer, rear three-quarter, matching reference COLUMN 2.
+ROW 3: faces straight DOWN toward viewer, head-on elevated view, matching reference COLUMN 3.
+ROW 4: faces straight UP away from viewer, rear elevated view, matching reference COLUMN 4.
+Six ordered phases IN EVERY ROW, left to right: (1) left-diagonal hoof pair contacts ground, (2) knees gently compress then push, (3) hooves tuck for a very small playful hop, (4) opposite hooves reach forward, (5) opposite diagonal pair lands with tiny wool-body compression, (6) recovery to phase 1. Show visibly distinct leg articulation in all six frames; ears wobble subtly with the step. Bounce should feel soft and weighted, not a high jump or floating. Keep body mass, head size and wool markings consistent through the cycle. Same body center per cell; common contact ground at 88 percent of cell height. Keep nose and tail entirely inside each cell. Transparent PNG with only the 24 sheep.

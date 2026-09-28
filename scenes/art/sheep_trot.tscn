@@ -1,0 +1,149 @@
+[gd_scene load_steps=6 format=3]
+[ext_resource type="Script" path="res://scripts/dev/sheep_review.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/actors/sheep_ivory.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/actors/sheep_cream.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/actors/sheep_spotted.tscn" id="4"]
+[ext_resource type="FontFile" path="res://assets/fonts/PT_Sans-Web-Regular.ttf" id="5"]
+[node name="SheepTrotReview" type="Node2D"]
+script = ExtResource("1")
+[node name="Backdrop" type="ColorRect" parent="."]
+offset_right = 819.0
+offset_bottom = 1456.0
+color = Color(0.60, 0.64, 0.45, 1)
+mouse_filter = 2
+[node name="Title" type="Label" parent="."]
+offset_left = 35.0
+offset_top = 35.0
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 38
+theme_override_colors/font_color = Color(0.16, 0.19, 0.10, 1)
+text = "Весёлая войлочная отара"
+[node name="Subtitle" type="Label" parent="."]
+offset_left = 35.0
+offset_top = 90.0
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.16, 0.19, 0.10, 1)
+text = "Три окраса · шаги, ушки и маленький подскок"
+[node name="Coat0" type="Label" parent="."]
+offset_left = 35.0
+offset_top = 175.0
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 27
+theme_override_colors/font_color = Color(0.16, 0.19, 0.10, 1)
+text = "Белая · чёрная мордочка"
+[node name="Sheep0_0" parent="." instance=ExtResource("2")]
+position = Vector2(110, 350)
+scale = Vector2(2.4, 2.4)
+initial_direction = 0
+collision_layer = 0
+collision_mask = 0
+[node name="Sheep0_1" parent="." instance=ExtResource("2")]
+position = Vector2(310, 350)
+scale = Vector2(2.4, 2.4)
+initial_direction = 1
+collision_layer = 0
+collision_mask = 0
+[node name="Sheep0_2" parent="." instance=ExtResource("2")]
+position = Vector2(510, 350)
+scale = Vector2(2.4, 2.4)
+initial_direction = 2
+collision_layer = 0
+collision_mask = 0
+[node name="Sheep0_3" parent="." instance=ExtResource("2")]
+position = Vector2(710, 350)
+scale = Vector2(2.4, 2.4)
+initial_direction = 3
+collision_layer = 0
+collision_mask = 0
+[node name="Coat1" type="Label" parent="."]
+offset_left = 35.0
+offset_top = 485.0
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 27
+theme_override_colors/font_color = Color(0.16, 0.19, 0.10, 1)
+text = "Кремовая · светлая мордочка"
+[node name="Sheep1_0" parent="." instance=ExtResource("3")]
+position = Vector2(110, 660)
+scale = Vector2(2.4, 2.4)
+initial_direction = 0
+collision_layer = 0
+collision_mask = 0
+[node name="Sheep1_1" parent="." instance=ExtResource("3")]
+position = Vector2(310, 660)
+scale = Vector2(2.4, 2.4)
+initial_direction = 1
+collision_layer = 0
+collision_mask = 0
+[node name="Sheep1_2" parent="." instance=ExtResource("3")]
+position = Vector2(510, 660)
+scale = Vector2(2.4, 2.4)
+initial_direction = 2
+collision_layer = 0
+collision_mask = 0
+[node name="Sheep1_3" parent="." instance=ExtResource("3")]
+position = Vector2(710, 660)
+scale = Vector2(2.4, 2.4)
+initial_direction = 3
+collision_layer = 0
+collision_mask = 0
+[node name="Coat2" type="Label" parent="."]
+offset_left = 35.0
+offset_top = 795.0
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 27
+theme_override_colors/font_color = Color(0.16, 0.19, 0.10, 1)
+text = "Пятнистая"
+[node name="Sheep2_0" parent="." instance=ExtResource("4")]
+position = Vector2(110, 970)
+scale = Vector2(2.4, 2.4)
+initial_direction = 0
+collision_layer = 0
+collision_mask = 0
+[node name="Sheep2_1" parent="." instance=ExtResource("4")]
+position = Vector2(310, 970)
+scale = Vector2(2.4, 2.4)
+initial_direction = 1
+collision_layer = 0
+collision_mask = 0
+[node name="Sheep2_2" parent="." instance=ExtResource("4")]
+position = Vector2(510, 970)
+scale = Vector2(2.4, 2.4)
+initial_direction = 2
+collision_layer = 0
+collision_mask = 0
+[node name="Sheep2_3" parent="." instance=ExtResource("4")]
+position = Vector2(710, 970)
+scale = Vector2(2.4, 2.4)
+initial_direction = 3
+collision_layer = 0
+collision_mask = 0
+[node name="FlockLabel" type="Label" parent="."]
+offset_left = 35.0
+offset_top = 1080.0
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(0.16, 0.19, 0.10, 1)
+text = "У каждой овечки свой ритм"
+[node name="Runner0" parent="." instance=ExtResource("2")]
+position = Vector2(130, 1265)
+scale = Vector2(2.4, 2.4)
+collision_layer = 0
+collision_mask = 0
+[node name="Runner1" parent="." instance=ExtResource("3")]
+position = Vector2(340, 1265)
+scale = Vector2(2.4, 2.4)
+collision_layer = 0
+collision_mask = 0
+[node name="Runner2" parent="." instance=ExtResource("4")]
+position = Vector2(550, 1265)
+scale = Vector2(2.4, 2.4)
+collision_layer = 0
+collision_mask = 0
+[node name="Footer" type="Label" parent="."]
+offset_left = 35.0
+offset_top = 1370.0
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 23
+theme_override_colors/font_color = Color(0.16, 0.19, 0.10, 1)
+text = "В движении — рысь; в покое — спокойная стойка."

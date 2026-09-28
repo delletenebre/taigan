@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+[ext_resource type="PackedScene" path="res://scenes/actors/sheep.tscn" id="1"]
+[ext_resource type="SpriteFrames" path="res://assets/animations/sheep_cream_trot.tres" id="2"]
+[node name="SheepCream" instance=ExtResource("1")]
+atlas_row = 1
+art_width = 61.0
+trot_scales = PackedFloat32Array(0.23240418989525, 0.22394586715137, 0.21874499985882, 0.21326222040754)
+frame_feet_y = PackedFloat32Array(325, 332, 323, 324)
+idle_offsets_x = PackedFloat32Array(-3.03314917127072, -1.01104972375691, -0.50552486187845, 0.67403314917127)
+[node name="Sprite" parent="Visual" index="0"]
+position = Vector2(0, -24.2651933701657)
+scale = Vector2(0.16850828729282, 0.16850828729282)
+region_rect = Rect2(0, 362, 362, 362)
+[node name="Trot" parent="Visual" index="1"]
+sprite_frames = ExtResource("2")

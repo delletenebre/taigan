@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3]
+[ext_resource type="Script" path="res://scripts/animal.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/wolf-v5.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/ui/blob_shadow.png" id="3"]
+[sub_resource type="CircleShape2D" id="Footprint"]
+radius = 11.0
+[node name="Wolf" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1")
+species = "wolf"
+speed = 51.0
+atlas_row = 0
+atlas_columns = 2
+atlas_rows = 2
+art_width = 80.0
+frame_regions = Array[Rect2]([Rect2(0, 0, 627, 627), Rect2(627, 0, 627, 650), Rect2(0, 627, 627, 627), Rect2(627, 650, 627, 604)])
+frame_feet_y = PackedFloat32Array(602, 629, 568, 553)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("Footprint")
+[node name="Shadow" type="Sprite2D" parent="."]
+position = Vector2(0, -2)
+scale = Vector2(0.24, 0.13)
+texture = ExtResource("3")
+modulate = Color(0.35, 0.29, 0.17, 0.48)
+[node name="Visual" type="Node2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="Visual"]
+position = Vector2(0, -29.7289)
+scale = Vector2(0.12759170653907495, 0.12759170653907495)
+texture = ExtResource("2")
+region_enabled = true
+region_rect = Rect2(0, 0, 627, 627)
+region_filter_clip_enabled = true
+[node name="Reaction" type="Node2D" parent="."]
+visible = false
+position = Vector2(0, -65)
+[node name="Stitch1" type="Line2D" parent="Reaction"]
+points = PackedVector2Array(-20, 4, -25, -3)
+width = 2.5
+default_color = Color(0.96, 0.91, 0.75, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+[node name="Stitch2" type="Line2D" parent="Reaction"]
+points = PackedVector2Array(-10, 0, -12, -9)
+width = 2.5
+default_color = Color(0.96, 0.91, 0.75, 1)
+begin_cap_mode = 2
+end_cap_mode = 2

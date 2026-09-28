@@ -1,6 +1,0 @@
-{
-  "sheep": {"model":"sheep_ivory", "speed":2.15, "herd_radius":4.8, "dog_fear_radius":3.8, "body_radius":0.38, "score":100, "implemented":true},
-  "yak": {"model":null, "implemented":false, "design":"Тяжелее, медленнее реагирует, движется устойчивой группой; нужна отдельная модель, мех, рога и анимации."},
-  "cow": {"model":null, "implemented":false, "design":"Больше радиус тела и дистанция между животными; нужны широкие ворота и мосты."},
-  "chicken": {"model":null, "implemented":false, "design":"Небольшие быстрые стайки; отдельный маленький загон и короткие рывки."}
-}

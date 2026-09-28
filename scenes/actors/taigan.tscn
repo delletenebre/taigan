@@ -1,0 +1,59 @@
+[gd_scene load_steps=6 format=3]
+[ext_resource type="Script" path="res://scripts/taigan.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/taigan-views-v2.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/ui/blob_shadow.png" id="3"]
+[ext_resource type="SpriteFrames" path="res://assets/animations/taigan_run.tres" id="4"]
+[sub_resource type="CircleShape2D" id="Footprint"]
+radius = 11.0
+[node name="Taigan" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1")
+species = "dog"
+speed = 175.0
+atlas_row = 0
+atlas_columns = 2
+atlas_rows = 2
+art_width = 102.0
+frame_regions = Array[Rect2]([Rect2(0, 0, 627, 627), Rect2(627, 0, 627, 627), Rect2(0, 627, 627, 627), Rect2(627, 627, 627, 627)])
+frame_feet_y = PackedFloat32Array(562, 571, 538, 548)
+idle_offsets_x = PackedFloat32Array(-4.66, 1.55, -5.49, 3.0)
+run_scales = {"run_down_diagonal": 0.253, "run_up_diagonal": 0.253, "run_down": 0.235, "run_up": 0.253, "run_side": 0.29}
+run_offsets = {"run_down_diagonal": Vector2(0, -51.612), "run_up_diagonal": Vector2(0, -51.612), "run_down": Vector2(0, -47.94), "run_up": Vector2(0, -51.612), "run_side": Vector2(0, -59.16)}
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("Footprint")
+[node name="Shadow" type="Sprite2D" parent="."]
+position = Vector2(4, -4)
+scale = Vector2(0.70, 0.24)
+texture = ExtResource("3")
+modulate = Color(0.18, 0.16, 0.11, 0.85)
+[node name="Visual" type="Node2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="Visual"]
+position = Vector2(0, -51.5189)
+scale = Vector2(0.2073170732, 0.2073170732)
+texture = ExtResource("2")
+region_enabled = true
+region_rect = Rect2(0, 0, 627, 627)
+region_filter_clip_enabled = true
+[node name="Run" type="AnimatedSprite2D" parent="Visual"]
+visible = false
+position = Vector2(0, -51.612)
+scale = Vector2(0.253, 0.253)
+sprite_frames = ExtResource("4")
+animation = &"run_down_diagonal"
+frame = 1
+[node name="Reaction" type="Node2D" parent="."]
+visible = false
+position = Vector2(0, -65)
+[node name="Stitch1" type="Line2D" parent="Reaction"]
+points = PackedVector2Array(-20, 4, -25, -3)
+width = 2.5
+default_color = Color(0.96, 0.91, 0.75, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+[node name="Stitch2" type="Line2D" parent="Reaction"]
+points = PackedVector2Array(-10, 0, -12, -9)
+width = 2.5
+default_color = Color(0.96, 0.91, 0.75, 1)
+begin_cap_mode = 2
+end_cap_mode = 2

@@ -1,20 +1,15 @@
-[gd_scene load_steps=5 format=3]
-
-[ext_resource type="Script" path="res://scripts/herd_actor.gd" id="1"]
-
-[ext_resource type="PackedScene" path="res://assets/models/sheep_ivory.glb" id="2"]
-
-[ext_resource type="PackedScene" path="res://scenes/effects/sheep_reaction.tscn" id="3"]
-
-[ext_resource type="PackedScene" path="res://scenes/effects/sheep_startle.tscn" id="4"]
-
-[node name="sheep_ivory" type="Node3D"]
-script = ExtResource("1")
-kind = "sheep"
-
-[node name="Visual" parent="." instance=ExtResource("2")]
-
-
-[node name="Reaction" parent="." instance=ExtResource("3")]
-
-[node name="Startle" parent="." instance=ExtResource("4")]
+[gd_scene load_steps=3 format=3]
+[ext_resource type="PackedScene" path="res://scenes/actors/sheep.tscn" id="1"]
+[ext_resource type="SpriteFrames" path="res://assets/animations/sheep_ivory_trot.tres" id="2"]
+[node name="SheepIvory" instance=ExtResource("1")]
+atlas_row = 0
+art_width = 64.0
+trot_scales = PackedFloat32Array(0.2431773167935, 0.24688078450213, 0.24494050721508, 0.23097487078952)
+frame_feet_y = PackedFloat32Array(332, 346, 338, 332)
+idle_offsets_x = PackedFloat32Array(-3.00552486187845, -1.94475138121547, -0.35359116022099, 1.23756906077348)
+[node name="Sprite" parent="Visual" index="0"]
+position = Vector2(0, -26.6961325966851)
+scale = Vector2(0.1767955801105, 0.1767955801105)
+region_rect = Rect2(0, 0, 362, 362)
+[node name="Trot" parent="Visual" index="1"]
+sprite_frames = ExtResource("2")
