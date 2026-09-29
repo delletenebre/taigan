@@ -198,28 +198,25 @@ func update_sheep(animal: FeltAnimal, delta: float) -> void:
 
 func can_sheep_sleep(animal: FeltAnimal, night: bool) -> bool:
 	if animal.state == "safe": return night
+	if animal.state != "grazing": return false
 	if animal.panic > 0.0 or animal.position.distance_to(dog.position) < 170.0: return false
 	for wolf in wolves:
 		if animal.position.distance_to(wolf.position) < 190.0: return false
-	if night: return true
-	var sleeping := 0
-	for other in sheep:
-		if other.state == "grazing" and other.asleep: sleeping += 1
-	if sleeping >= 3: return false
-	# Connected neighbours form one crowd, so a long tight flock cannot bypass
-	# the one-sleeper rule by placing sleepers at its opposite ends.
+	if not night:
+		var sleeping := 0
+		for other in sheep:
+			if other.state == "grazing" and other.asleep: sleeping += 1
+		if sleeping >= 3: return false
+	# Connected neighbours count as one crowd, even in a long line.
 	var group: Array[FeltAnimal] = [animal]
 	var index := 0
 	while index < group.size():
 		for other in sheep:
 			if other.state != "grazing" or other in group: continue
 			if other.position.distance_to(group[index].position) < 75.0:
+				if other.asleep: return false
 				group.append(other)
 		index += 1
-	# Up to three companions is a small group; larger crowds keep one sleeper.
-	if group.size() > 4:
-		for other in group:
-			if other.asleep: return false
 	return true
 
 func bark() -> void:
@@ -284,6 +281,7 @@ func update_wolf(wolf: FeltAnimal, delta: float) -> void:
 			wolf.carrying.hide()
 			wolf.carrying = null
 			lost += 1
+			$CaptureVoices.play_escape()
 			remove_wolf(wolf)
 			return
 	elif wolf.scared > 0 and wolf.position.distance_to(goal) < 18:

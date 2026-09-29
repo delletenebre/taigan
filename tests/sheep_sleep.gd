@@ -22,44 +22,44 @@ func run(game: Node2D, check: Callable) -> void:
 	var delays := {}
 	var day_range := true
 	for animal in game.sheep:
-		day_range = day_range and animal.sleep_delay >= 5.0 and animal.sleep_delay <= 10.0
+		day_range = day_range and animal.sleep_delay >= 8.0 and animal.sleep_delay <= 14.0
 		delays[animal.sleep_delay] = true
-	check.call(day_range and delays.size() > 1, "day sleep delays are independently randomized between five and ten seconds")
-	sheep.update_sleep(4.9, false, true)
-	check.call(not sheep.asleep, "day sheep cannot fall asleep before five quiet seconds")
+	check.call(day_range and delays.size() > 1, "day sleep delays are independently randomized between eight and fourteen seconds")
+	sheep.update_sleep(7.9, false, true)
+	check.call(not sheep.asleep, "day sheep cannot fall asleep before eight quiet seconds")
 	for animal in game.sheep:
-		animal.update_sleep(10.0, false, game.can_sheep_sleep(animal, false))
+		animal.update_sleep(14.0, false, game.can_sheep_sleep(animal, false))
 	var count := 0
 	for animal in game.sheep:
 		if animal.asleep: count += 1
 	check.call(count == 3, "daytime field admits at most three sleepers")
 	for animal in game.sheep: animal.wake_from_bark()
-	for index in range(5): game.sheep[index].position = Vector2(2000 + index * 12, 2000)
+	for index in range(5): game.sheep[index].position = Vector2(2000 + index * 60, 2000)
 	for animal in game.sheep:
-		animal.update_sleep(10.0, false, game.can_sheep_sleep(animal, false))
+		animal.update_sleep(14.0, false, game.can_sheep_sleep(animal, false))
 	count = 0
 	for index in range(5):
 		if game.sheep[index].asleep: count += 1
-	check.call(count == 1, "large daytime crowd admits only one sleeping sheep")
+	check.call(count == 1, "connected daytime crowd admits only one sleeper even across a long chain")
 	for animal in game.sheep: animal.wake_from_bark()
 	game.sheep[4].position = Vector2(4000, 2000)
 	for animal in game.sheep:
-		animal.update_sleep(10.0, false, game.can_sheep_sleep(animal, false))
-	check.call(game.sheep[0].asleep and game.sheep[1].asleep and game.sheep[2].asleep, "small group with up to three companions can share the three daytime slots")
+		animal.update_sleep(14.0, false, game.can_sheep_sleep(animal, false))
+	check.call(game.sheep[0].asleep and not game.sheep[1].asleep and not game.sheep[2].asleep, "even a small connected group admits only one sleeper")
 	var night_range := true
 	for animal in game.sheep:
 		animal.wake_from_bark()
 		animal.update_sleep(0.0, true, true)
-		night_range = night_range and animal.sleep_delay >= 2.0 and animal.sleep_delay <= 5.0
-		animal.update_sleep(1.9, true, true)
+		night_range = night_range and animal.sleep_delay >= 5.0 and animal.sleep_delay <= 8.0
+		animal.update_sleep(4.9, true, true)
 		night_range = night_range and not animal.asleep
-	check.call(night_range, "night resets all delays to two through five seconds")
+	check.call(night_range, "night resets all delays to five through eight seconds")
 	for animal in game.sheep:
-		animal.update_sleep(5.0, true, game.can_sheep_sleep(animal, true))
+		animal.update_sleep(8.0, true, game.can_sheep_sleep(animal, true))
 	count = 0
 	for animal in game.sheep:
 		if animal.asleep: count += 1
-	check.call(count == 6, "night allows the whole distant flock to sleep including a crowd")
+	check.call(count == 3, "night keeps one sleeper in the crowd while isolated sheep can sleep")
 	game.level.set_night(1.0)
 	sheep.position = Vector2(430, 700)
 	game.dog.position = sheep.position + Vector2(60, 0)
@@ -98,15 +98,33 @@ func run(game: Node2D, check: Callable) -> void:
 	sheep.wake_from_bark()
 	sheep.position = Vector2(581, 313)
 	game.update_sheep(sheep, 0.001)
-	check.call(sheep.state == "safe" and sheep.asleep, "entering the pen at night immediately rescues and sleeps")
+	check.call(sheep.state == "safe" and not sheep.asleep and sheep.sleep_delay >= 3.0 and sheep.sleep_delay <= 10.0, "entering the pen at night starts a fresh three to ten second delay")
+	sheep.update_sleep(2.9, true, true)
+	check.call(not sheep.asleep, "pen sheep cannot sleep before three seconds")
+	sheep.update_sleep(10.0, true, true)
+	check.call(sheep.asleep, "pen sheep sleeps when its entry countdown finishes")
+	sheep.update_sleep(0.0, false, false)
+	check.call(not sheep.asleep, "dawn wakes sleeping pen sheep")
+	sheep.update_sleep(100.0, false, false)
+	check.call(not sheep.asleep, "pen sheep stays awake all day")
+	sheep.update_sleep(0.0, true, true)
+	check.call(not sheep.asleep and sheep.sleep_remaining >= 3.0 and sheep.sleep_remaining <= 10.0, "night starts a fresh pen countdown")
+	sheep.update_sleep(10.0, true, true)
+	var neighbor: FeltAnimal = game.sheep[1]
+	neighbor.wake_from_bark()
+	neighbor.position = sheep.position + Vector2(20, 0)
+	neighbor.state = "safe"
+	neighbor.update_sleep(10.0, true, game.can_sheep_sleep(neighbor, true))
+	check.call(sheep.asleep and neighbor.asleep, "pen sheep can sleep together after their individual countdowns")
 	game.dog.position = sheep.position + Vector2(60, 0)
 	game.cooldown = 0.0
 	game.bark()
 	game.update_sheep(sheep, 0.001)
-	check.call(not sheep.asleep and sheep.sleep_remaining > 1.9, "bark wakes pen sheep for a fresh night delay")
+	check.call(not sheep.asleep and sheep.sleep_remaining > 2.9, "bark wakes pen sheep for a fresh night delay")
 	sheep.fall_asleep()
 	sheep.animate_motion(1.4)
 	check.call(sheep.get_node("Sleep").visible and sheep.get_node("Sleep/Z1").modulate.a > 0.0 and sheep.sprite.visible and not sheep.trot.visible, "sleep shows floating z marks with an opaque resting pose")
+	check.call(is_equal_approx(sheep.visual.position.y, 7.0) and is_equal_approx(sheep.sleep_material.get_shader_parameter("sleep_amount"), 1.0), "sleep settles the body and closes eyes with tucked feet")
 	var clock: float = sheep.sleep_clock
 	game.toggle_pause()
 	game._physics_process(1.0)
@@ -114,7 +132,7 @@ func run(game: Node2D, check: Callable) -> void:
 	game.toggle_pause()
 	sheep.wake_from_bark()
 	sheep.animate_motion(1.0)
-	check.call(not sheep.get_node("Sleep").visible and sheep.visual.scale == Vector2.ONE, "waking fades z marks and restores the exact original scale")
+	check.call(not sheep.get_node("Sleep").visible and sheep.visual.scale == Vector2.ONE and sheep.visual.position == Vector2.ZERO and is_zero_approx(sheep.sleep_material.get_shader_parameter("sleep_amount")), "waking fades z marks and restores the exact original scale")
 	game.sheep = original_sheep
 	game.wolves = original_wolves
 	game.dog.position = dog_position

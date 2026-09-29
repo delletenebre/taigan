@@ -77,10 +77,16 @@ func run(game: Node2D) -> void:
 	wolf.position = victim.position
 	game.update_wolf(wolf, 1.0/60.0)
 	check(victim.state == "carried" and wolf.carrying == victim, "wolf takes an unprotected sheep")
-	check(game.get_node("CaptureVoices").playing and game.get_node("CaptureVoices/Wolf").playing, "capture triggers both sheep and wolf voices")
+	check(game.get_node("CaptureVoices").playing and not game.get_node("CaptureVoices/Wolf").playing, "capture triggers only the sheep voice")
 	game.dog.position = wolf.position + Vector2(20, 0)
 	game.update_wolf(wolf, 1.0/60.0)
 	check(victim.state == "grazing" and wolf.carrying == null, "Taigan approach rescues carried sheep")
+	check(not game.get_node("CaptureVoices/Wolf").playing, "rescuing the sheep does not trigger a wolf grunt")
+	wolf.position = level.wolf_spawn.position
+	game.update_wolf(wolf, 0.0)
+	check(not game.get_node("CaptureVoices/Wolf").playing and game.lost == 0, "empty-handed retreat does not trigger a wolf grunt")
+	wolf = game.spawn_wolf()
+	game.get_node("CaptureVoices").stop()
 	game.dog.position = Vector2(400, 850)
 	wolf.scared = 0
 	wolf.carrying = victim
@@ -88,6 +94,7 @@ func run(game: Node2D) -> void:
 	wolf.position = level.wolf_spawn.position
 	game.update_wolf(wolf, 1.0/60.0)
 	check(game.lost == 1 and victim.state == "lost", "wolf departure records loss")
+	check(game.get_node("CaptureVoices/Wolf").playing and not game.get_node("CaptureVoices").playing, "successful forest departure triggers only the wolf grunt")
 	check(not game.complete, "one lost sheep does not end the round")
 	# Follow the actual navigation route with collision movement, not just path existence.
 	game.dog.position = Vector2(320, 850)
