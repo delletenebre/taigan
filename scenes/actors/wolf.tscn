@@ -1,8 +1,12 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=8 format=3]
 [ext_resource type="Script" path="res://scripts/wolf.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/art/wolf-v5.png" id="2"]
 [ext_resource type="Texture2D" path="res://assets/ui/blob_shadow.png" id="3"]
 [ext_resource type="SpriteFrames" path="res://assets/animations/wolf_trot.tres" id="4"]
+[ext_resource type="Shader" path="res://assets/shaders/wolf_eyes.gdshader" id="5"]
+[sub_resource type="ShaderMaterial" id="Eyes"]
+resource_local_to_scene = true
+shader = ExtResource("5")
 [sub_resource type="CircleShape2D" id="Footprint"]
 radius = 11.0
 [node name="Wolf" type="CharacterBody2D"]
@@ -28,6 +32,7 @@ texture = ExtResource("3")
 modulate = Color(0.35, 0.29, 0.17, 0.48)
 [node name="Visual" type="Node2D" parent="."]
 [node name="Sprite" type="Sprite2D" parent="Visual"]
+material = SubResource("Eyes")
 position = Vector2(0, -29.7289)
 scale = Vector2(0.12759170653907495, 0.12759170653907495)
 texture = ExtResource("2")
@@ -35,6 +40,7 @@ region_enabled = true
 region_rect = Rect2(0, 0, 627, 627)
 region_filter_clip_enabled = true
 [node name="Trot" type="AnimatedSprite2D" parent="Visual"]
+material = SubResource("Eyes")
 visible = false
 sprite_frames = ExtResource("4")
 animation = &"trot_down_diagonal"

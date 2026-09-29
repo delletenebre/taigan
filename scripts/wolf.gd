@@ -23,6 +23,10 @@ func set_facing(direction: int, flip: bool) -> void:
 	sector = ([3 if flip else 1, 7 if flip else 5, 2, 6] as Array[int])[direction]
 	heading = sector * PI / 4.0
 
+func set_night(amount: float) -> void:
+	# Both standing and walking share this scene-local material.
+	sprite.material.set_shader_parameter("night",clampf(amount,0.0,1.0))
+
 func travel(motion: Vector2, delta: float) -> void:
 	var before := position
 	velocity = motion

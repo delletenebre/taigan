@@ -3,6 +3,7 @@ extends Node2D
 
 const CELL := 10
 var grid := AStarGrid2D.new()
+var night_strength := 0.0
 @onready var ground: Node2D = $Walkable
 @onready var obstacles: Node2D = $Obstacles
 @onready var entrance: Marker2D = $Markers/Entrance
@@ -22,7 +23,8 @@ func _ready() -> void:
 
 func set_night(amount: float) -> void:
 	var night := clampf(amount, 0.0, 1.0)
-	modulate = Color.WHITE.lerp(Color(0.62, 0.70, 0.86), night * 0.65)
+	night_strength = night
+	modulate = Color.WHITE.lerp(Color(0.38, 0.46, 0.64), night)
 	var light: PointLight2D = $Markers/WolfSpawn/TrailLight
 	light.enabled = night > 0.0
 	light.energy = 0.25 * smoothstep(0.0, 0.25, night)

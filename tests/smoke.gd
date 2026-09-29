@@ -9,6 +9,18 @@ func check(condition: bool, message: String) -> void:
 
 func run(game: Node2D) -> void:
 	game.set_physics_process(false)
+	var skip: Button = game.hud.get_node("WolfTimer/Skip")
+	skip.pressed.emit()
+	check(is_equal_approx(game.evening_seconds-game.elapsed,4.0) and game.hud.get_node("WolfTimer/Text").text == "00:04", "timer click leaves four seconds and updates the display")
+	game.elapsed = game.evening_seconds - 2.0
+	skip.pressed.emit()
+	check(is_equal_approx(game.evening_seconds-game.elapsed,2.0), "timer click never adds seconds")
+	game.elapsed = game.evening_seconds + 5.0
+	skip.pressed.emit()
+	check(is_equal_approx(game.elapsed,game.evening_seconds+5.0), "timer click cannot rewind night")
+	game.elapsed = 0.0
+	game.level.set_night(0.0)
+	game.hud.update_values(game.rescued,game.sheep.size(),game.evening_seconds,0,0)
 	var level: FeltLevel = game.level
 	var dog: FeltAnimal = game.dog
 	var day_wolves := 0
@@ -21,6 +33,7 @@ func run(game: Node2D) -> void:
 	load("res://tests/taigan_animation.gd").new().run(dog, check)
 	load("res://tests/sheep_animation.gd").new().run(game, check)
 	load("res://tests/wolf_animation.gd").new().run(game, check)
+	load("res://tests/sheep_sleep.gd").new().run(game, check)
 	check(game.sheep.size() == 12 and game.rescued == 0, "12 sheep to collect and an empty starting enclosure")
 	check(not level.walkable(Vector2(250, 482)), "river outside bridge is blocked")
 	check(level.walkable(Vector2(430, 491)), "wooden bridge is walkable")
@@ -64,6 +77,7 @@ func run(game: Node2D) -> void:
 	wolf.position = victim.position
 	game.update_wolf(wolf, 1.0/60.0)
 	check(victim.state == "carried" and wolf.carrying == victim, "wolf takes an unprotected sheep")
+	check(game.get_node("CaptureVoices").playing and game.get_node("CaptureVoices/Wolf").playing, "capture triggers both sheep and wolf voices")
 	game.dog.position = wolf.position + Vector2(20, 0)
 	game.update_wolf(wolf, 1.0/60.0)
 	check(victim.state == "grazing" and wolf.carrying == null, "Taigan approach rescues carried sheep")
@@ -83,12 +97,20 @@ func run(game: Node2D) -> void:
 		await game.get_tree().physics_frame
 		steps += 1
 	check(game.dog.position.distance_to(level.pen_center.position) <= 20, "Taigan actually traverses bridge and open gate with collisions")
+	game.elapsed = game.evening_seconds - 12.0
+	check(is_zero_approx(game.night_amount()), "dusk starts twelve seconds before wolves")
+	game.elapsed = game.evening_seconds - 7.0
+	game._physics_process(0.01)
+	check(level.night_strength > 0.45 and level.night_strength < 0.55 and game.wolves.is_empty(), "dusk darkens the scene while the countdown is still running")
+	game.elapsed = game.evening_seconds - 2.0
+	game._physics_process(0.01)
+	check(is_equal_approx(level.night_strength,1.0) and game.wolves.is_empty(), "full darkness arrives two seconds before wolves")
 	game.elapsed = game.evening_seconds - 0.01
 	game.next_wolf = game.evening_seconds
 	var wolves_before: int = game.wolves.size()
 	game._physics_process(0.02)
 	check(game.wolves.size() == wolves_before + 1, "wolves begin hunting when countdown ends")
-	check(trail_light.enabled and trail_light.energy > 0.0 and trail_light.energy < 0.25, "trail glow fades in when night starts")
+	check(trail_light.enabled and is_equal_approx(trail_light.energy,0.25) and is_equal_approx(level.night_strength,1.0), "wolf appears only after night lighting is fully established")
 	level.set_night(1.0)
 	check(is_equal_approx(trail_light.energy, 0.25), "night trail glow stays subtle")
 	check(level.get_node("YurtAtmosphere/Warmth").energy > 0.0 and level.get_node("YurtAtmosphere/Doorway").visible, "night lights the yurt interior and doorstep")

@@ -132,7 +132,7 @@ s+='[node name="YurtAtmosphere" parent="." instance=ExtResource("10")]\n'
 s+='[node name="WolfForest" parent="Actors" instance=ExtResource("11")]\n'
 save('scenes/levels/pasture.tscn',s)
 # HUD is entirely editable Controls, using sewn fabric image panels.
-s='''[gd_scene load_steps=13 format=3]
+s='''[gd_scene load_steps=14 format=3]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/art/felt-panel.png" id="2"]
 [ext_resource type="FontFile" path="res://assets/fonts/PT_Sans-Web-Regular.ttf" id="3"]
@@ -165,6 +165,7 @@ Button/styles/normal = SubResource("Fabric")
 Button/styles/hover = SubResource("Fabric")
 Button/styles/pressed = SubResource("Fabric")
 Button/styles/disabled = SubResource("Fabric")
+[sub_resource type="StyleBoxEmpty" id="TimerHitArea"]
 [node name="Interface" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -190,6 +191,7 @@ for name,x,w,text in [('SheepCount',18,208,'0/12'),('WolfTimer',522,200,'01:00')
 s+=rect('Pause','.','Button',735,17,66,68,'text = "Ⅱ"\ntheme_override_font_sizes/font_size = 38')
 s+=rect('Goal','.','TextureRect',192,1365,435,62,'texture = SubResource("PanelTexture")\nexpand_mode = 1\nstretch_mode = 0\nmouse_filter = 2')
 s+=rect('Text','Goal','Label',44,0,347,62,'text = "Собери всю отару"\nhorizontal_alignment = 1\nvertical_alignment = 1\nmouse_filter = 2')
+s+='[node name="Skip" type="Button" parent="WolfTimer"]\nlayout_mode = 0\noffset_right = 200.0\noffset_bottom = 68.0\nflat = true\ntheme_override_styles/normal = SubResource("TimerHitArea")\ntheme_override_styles/hover = SubResource("TimerHitArea")\ntheme_override_styles/pressed = SubResource("TimerHitArea")\ntheme_override_styles/focus = SubResource("TimerHitArea")\ntheme_override_styles/disabled = SubResource("TimerHitArea")\nfocus_mode = 0\nmouse_default_cursor_shape = 2\ntooltip_text = "Для теста: до ночи не больше 4 секунд"\n'
 for name,x in [('Left',10),('Right',391)]: s+=rect(name,'Goal','TextureRect',x,15,32,32,'texture = ExtResource("5")\nexpand_mode = 1\nstretch_mode = 5\nmouse_filter = 2')
 s+=rect('Bark','.','Button',711,1285,83,67,'text = "Гав!"\ntooltip_text = "Пробел или двойной тап — лай"\ntheme_override_font_sizes/font_size = 23')
 s+=rect('Hint','.','Label',184,1425,460,26,'text = "Веди касанием · Двойной тап — лай"\nhorizontal_alignment = 1\ntheme_override_font_sizes/font_size = 16\ntheme_override_colors/font_color = Color(0.3, 0.23, 0.16, 0.85)\nmouse_filter = 2')
@@ -200,12 +202,13 @@ s+=rect('Description','Overlay/Card','Label',30,112,529,158,'text = ""\nhorizont
 s+=rect('Resume','Overlay/Card','Button',65,285,459,62,'text = "Вернуться к отаре"')
 s+=rect('Restart','Overlay/Card','Button',65,361,459,62,'text = "Начать заново"')
 save('scenes/ui/hud.tscn',s)
-s='''[gd_scene load_steps=10 format=3]
+s='''[gd_scene load_steps=11 format=3]
 [ext_resource type="Script" path="res://scripts/game.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/levels/pasture.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="3"]
 '''
 for i,name in enumerate(['bark','howl','pen','win','lose'],4): s+=f'[ext_resource type="AudioStream" path="res://assets/audio/{name}.wav" id="{i}"]\n'
+s+='[ext_resource type="PackedScene" path="res://scenes/effects/capture_voices.tscn" id="9"]\n'
 s+='''[sub_resource type="World2D" id="World"]
 [node name="Taigan" type="Node2D"]
 script = ExtResource("1")
@@ -214,4 +217,5 @@ script = ExtResource("1")
 [node name="Interface" parent="HUD" instance=ExtResource("3")]
 '''
 for i,name in enumerate(['bark','howl','pen','win','lose'],4): s+=f'[node name="{name.title()}Sound" type="AudioStreamPlayer" parent="."]\nstream = ExtResource("{i}")\nvolume_db = -8.0\n'
+s+='[node name="CaptureVoices" parent="." instance=ExtResource("9")]\n'
 save('scenes/main.tscn',s)

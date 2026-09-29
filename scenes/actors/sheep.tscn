@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 [ext_resource type="Script" path="res://scripts/sheep.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/art/sheep-variants.png" id="2"]
 [ext_resource type="Texture2D" path="res://assets/ui/blob_shadow.png" id="3"]
 [ext_resource type="SpriteFrames" path="res://assets/animations/sheep_ivory_trot.tres" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/effects/sheep_sleep.tscn" id="5"]
 [sub_resource type="CircleShape2D" id="Footprint"]
 radius = 9.0
 [node name="Sheep" type="CharacterBody2D"]
@@ -52,3 +53,5 @@ width = 2.5
 default_color = Color(0.96, 0.91, 0.75, 1)
 begin_cap_mode = 2
 end_cap_mode = 2
+
+[node name="Sleep" parent="." instance=ExtResource("5")]

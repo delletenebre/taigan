@@ -3,6 +3,10 @@ func run(game: Node, check: Callable) -> void:
 	var wolf: FeltAnimal = load("res://scenes/actors/wolf.tscn").instantiate()
 	game.add_child(wolf)
 	wolf.position = Vector2(-2000,-2000)
+	wolf.set_night(1.0)
+	check.call(wolf.sprite.material == wolf.trot.material and is_equal_approx(wolf.sprite.material.get_shader_parameter("night"),1.0),"wolf eyes share night illumination across idle and walking")
+	wolf.set_night(0.0)
+	check.call(is_zero_approx(wolf.sprite.material.get_shader_parameter("night")),"wolf eye glow switches off in daytime")
 	var complete := true
 	for name in wolf.TROT_NAMES:
 		complete = complete and wolf.trot.sprite_frames.get_frame_count(name) == 6

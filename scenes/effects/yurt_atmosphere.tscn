@@ -1,15 +1,16 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=13 format=3]
 [ext_resource type="Script" path="res://scripts/yurt_atmosphere.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/art/pasture.png" id="2"]
 [ext_resource type="Texture2D" path="res://assets/art/pasture-smoke-cleanplate.png" id="3"]
 [ext_resource type="Shader" path="res://assets/shaders/yurt_smoke.gdshader" id="4"]
+[ext_resource type="Shader" path="res://assets/shaders/yurt_fire_glow.gdshader" id="5"]
 [sub_resource type="ShaderMaterial" id="SmokeMaterial"]
 resource_local_to_scene = true
 shader = ExtResource("4")
 shader_parameter/clean_plate = ExtResource("3")
 [sub_resource type="Gradient" id="DoorGradient"]
 offsets = PackedFloat32Array(0, 0.6, 1)
-colors = PackedColorArray(1, 0.62, 0.22, 1, 0.60, 0.23, 0.055, 1, 0.12, 0.055, 0.02, 1)
+colors = PackedColorArray(1, 0.72, 0.30, 1, 0.90, 0.40, 0.10, 1, 0.30, 0.12, 0.035, 1)
 [sub_resource type="GradientTexture2D" id="DoorTexture"]
 gradient = SubResource("DoorGradient")
 width = 64
@@ -26,8 +27,13 @@ height = 256
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
-[sub_resource type="CanvasItemMaterial" id="Unlit"]
-light_mode = 1
+[sub_resource type="ShaderMaterial" id="Unlit"]
+resource_local_to_scene = true
+shader = ExtResource("5")
+[sub_resource type="ShaderMaterial" id="Spill"]
+resource_local_to_scene = true
+shader = ExtResource("5")
+shader_parameter/spill = 1.0
 [node name="YurtAtmosphere" type="Node2D"]
 scale = Vector2(0.8703507, 0.8708134)
 script = ExtResource("1")
@@ -51,3 +57,9 @@ scale = Vector2(0.46, 0.30)
 color = Color(1, 0.61, 0.28, 1)
 energy = 0.0
 texture = SubResource("Glow")
+[node name="DoorstepGlow" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(816,332)
+scale = Vector2(0.34,0.17)
+texture = SubResource("Glow")
+material = SubResource("Spill")

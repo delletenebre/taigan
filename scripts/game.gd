@@ -1,7 +1,10 @@
 extends Node2D
 
 @export var evening_seconds: float = 60.0
+@export var dusk_duration: float = 10.0
+@export var full_night_lead: float = 2.0
 @export var wolf_interval: float = 24.0
+@export var timer_skip_enabled := true
 const WOLF := preload("res://scenes/actors/wolf.tscn")
 var elapsed: float = 0.0
 var cooldown: float = 0.0
@@ -31,6 +34,8 @@ func _ready() -> void:
 				rescued += 1
 				child.destination = child.position
 	next_wolf = evening_seconds
+	hud.timer_skip_requested.connect(skip_to_night)
+	hud.get_node("WolfTimer/Skip").visible = timer_skip_enabled
 	hud.pause_requested.connect(toggle_pause)
 	hud.bark_requested.connect(bark)
 	hud.restart_requested.connect(func(): get_tree().reload_current_scene())
@@ -82,6 +87,17 @@ func aim(p: Vector2) -> void:
 	$Pasture/Target.show()
 	$Pasture/Target/AnimationPlayer.play("pulse")
 
+func skip_to_night() -> void:
+	if not timer_skip_enabled or paused or complete or elapsed >= evening_seconds: return
+	elapsed = maxf(elapsed, evening_seconds - 4.0)
+	level.set_night(night_amount())
+	hud.update_values(rescued, sheep.size(), maxf(0.0, evening_seconds - elapsed), cooldown, lost)
+
+func night_amount() -> float:
+	var full_night_at := maxf(0.0, evening_seconds - full_night_lead)
+	var dusk_start := maxf(0.0, full_night_at - dusk_duration)
+	return smoothstep(dusk_start, maxf(dusk_start + 0.001, full_night_at), elapsed)
+
 func toggle_pause() -> void:
 	if complete: return
 	paused = not paused
@@ -94,6 +110,8 @@ func toggle_pause() -> void:
 func _physics_process(delta: float) -> void:
 	if paused or complete: return
 	elapsed += delta
+	# Finish dusk before the countdown reaches zero and wolves are spawned.
+	level.set_night(night_amount())
 	cooldown = maxf(0.0, cooldown - delta)
 	var input := Vector2(float(Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT)) - float(Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT)), float(Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN)) - float(Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP)))
 	var direction := input.normalized()
@@ -111,8 +129,6 @@ func _physics_process(delta: float) -> void:
 	if elapsed >= next_wolf and wolves.size() < 2:
 		spawn_wolf()
 		next_wolf = elapsed + wolf_interval
-	var night := clampf((elapsed - evening_seconds) / 8.0, 0.0, 1.0)
-	level.set_night(night)
 	hud.update_values(rescued, sheep.size(), maxf(0, evening_seconds - elapsed), cooldown, lost)
 	if rescued + lost == sheep.size(): finish()
 
@@ -123,15 +139,20 @@ func update_sheep(animal: FeltAnimal, delta: float) -> void:
 		animal.animate_motion(delta)
 		return
 	animal.panic = maxf(0, animal.panic - delta)
-	if animal.state == "safe":
-		animal.travel((animal.destination - animal.position).limit_length(16), delta)
-		return
-	if level.in_pen(animal.position):
+	if animal.state != "safe" and level.in_pen(animal.position):
 		animal.state = "safe"
 		animal.destination = Vector2(523 + (rescued % 4) * 28, 230 + (rescued / 4) * 27)
 		rescued += 1
 		$PenSound.play()
 		hud.bump_count()
+	var night := level.night_strength >= 0.999
+	animal.update_sleep(delta, night, can_sheep_sleep(animal, night))
+	if animal.asleep:
+		animal.velocity = Vector2.ZERO
+		animal.animate_motion(delta)
+		return
+	if animal.state == "safe":
+		animal.travel((animal.destination - animal.position).limit_length(16), delta)
 		return
 	var away := animal.position - dog.position
 	var danger := away.length() < 115 or animal.panic > 0
@@ -175,6 +196,32 @@ func update_sheep(animal: FeltAnimal, delta: float) -> void:
 		motion = level.safe_motion(animal.position, motion, 0.35)
 	animal.travel(level.safe_motion(animal.position, motion, delta), delta)
 
+func can_sheep_sleep(animal: FeltAnimal, night: bool) -> bool:
+	if animal.state == "safe": return night
+	if animal.panic > 0.0 or animal.position.distance_to(dog.position) < 170.0: return false
+	for wolf in wolves:
+		if animal.position.distance_to(wolf.position) < 190.0: return false
+	if night: return true
+	var sleeping := 0
+	for other in sheep:
+		if other.state == "grazing" and other.asleep: sleeping += 1
+	if sleeping >= 3: return false
+	# Connected neighbours form one crowd, so a long tight flock cannot bypass
+	# the one-sleeper rule by placing sleepers at its opposite ends.
+	var group: Array[FeltAnimal] = [animal]
+	var index := 0
+	while index < group.size():
+		for other in sheep:
+			if other.state != "grazing" or other in group: continue
+			if other.position.distance_to(group[index].position) < 75.0:
+				group.append(other)
+		index += 1
+	# Up to three companions is a small group; larger crowds keep one sleeper.
+	if group.size() > 4:
+		for other in group:
+			if other.asleep: return false
+	return true
+
 func bark() -> void:
 	if paused or complete or cooldown > 0: return
 	cooldown = 2.4
@@ -182,9 +229,11 @@ func bark() -> void:
 	bark_effect.position = dog.position
 	bark_effect.get_node("AnimationPlayer").play("bark")
 	for animal in sheep:
-		if animal.state == "grazing" and animal.position.distance_to(dog.position) < 165:
-			animal.panic = 1.35
-			animal.bark_direction = (animal.position - dog.position).normalized()
+		if animal.state != "lost" and animal.position.distance_to(dog.position) < 165:
+			animal.wake_from_bark()
+			if animal.state == "grazing":
+				animal.panic = 1.35
+				animal.bark_direction = (animal.position - dog.position).normalized()
 	for wolf in wolves:
 		if wolf.position.distance_to(dog.position) < 180: scare_wolf(wolf)
 
@@ -193,6 +242,7 @@ func spawn_wolf() -> FeltAnimal:
 	$Pasture/Actors.add_child(wolf)
 	wolf.position = level.wolf_spawn.position
 	wolf.state = "hunting"
+	wolf.set_night(level.night_strength)
 	wolves.append(wolf)
 	$HowlSound.play()
 	return wolf
@@ -206,6 +256,7 @@ func scare_wolf(wolf: FeltAnimal) -> void:
 		wolf.carrying = null
 
 func update_wolf(wolf: FeltAnimal, delta: float) -> void:
+	wolf.set_night(level.night_strength)
 	wolf.scared = maxf(0, wolf.scared - delta)
 	if wolf.position.distance_to(dog.position) < 75: scare_wolf(wolf)
 	var goal := level.wolf_spawn.position
@@ -223,6 +274,7 @@ func update_wolf(wolf: FeltAnimal, delta: float) -> void:
 			if distance < 25:
 				wolf.carrying = closest
 				closest.state = "carried"
+				$CaptureVoices.play_capture()
 	if is_instance_valid(wolf.carrying):
 		goal = level.wolf_spawn.position
 		wolf.carrying.position = wolf.position + Vector2(0, -24)

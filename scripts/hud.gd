@@ -3,8 +3,10 @@ signal pause_requested
 signal bark_requested
 signal restart_requested
 signal resume_requested
+signal timer_skip_requested
 
 func _ready() -> void:
+	$WolfTimer/Skip.pressed.connect(func(): timer_skip_requested.emit())
 	$Pause.pressed.connect(func(): pause_requested.emit())
 	$Bark.pressed.connect(func(): bark_requested.emit())
 	$Overlay/Card/Resume.pressed.connect(func(): resume_requested.emit())

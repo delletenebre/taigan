@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/art/felt-panel.png" id="2"]
 [ext_resource type="FontFile" path="res://assets/fonts/PT_Sans-Web-Regular.ttf" id="3"]
@@ -31,6 +31,7 @@ Button/styles/normal = SubResource("Fabric")
 Button/styles/hover = SubResource("Fabric")
 Button/styles/pressed = SubResource("Fabric")
 Button/styles/disabled = SubResource("Fabric")
+[sub_resource type="StyleBoxEmpty" id="TimerHitArea"]
 [node name="Interface" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -99,6 +100,19 @@ text = "01:00"
 theme_override_font_sizes/font_size = 39
 vertical_alignment = 1
 mouse_filter = 2
+[node name="Skip" type="Button" parent="WolfTimer"]
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 68.0
+flat = true
+theme_override_styles/normal = SubResource("TimerHitArea")
+theme_override_styles/hover = SubResource("TimerHitArea")
+theme_override_styles/pressed = SubResource("TimerHitArea")
+theme_override_styles/focus = SubResource("TimerHitArea")
+theme_override_styles/disabled = SubResource("TimerHitArea")
+focus_mode = 0
+mouse_default_cursor_shape = 2
+tooltip_text = "Для теста: до ночи не больше 4 секунд"
 [node name="Pause" type="Button" parent="."]
 layout_mode = 0
 offset_left = 735.0
