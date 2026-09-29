@@ -1,13 +1,15 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=13 format=3]
 [ext_resource type="Script" path="res://scripts/level.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/art/pasture.png" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/actors/sheep_ivory.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/actors/taigan.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/effects/bark.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://scenes/effects/target.tscn" id="6"]
-[ext_resource type="PackedScene" path="res://scenes/actors/wolf.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/effects/wolf_trail_light.tscn" id="7"]
 [ext_resource type="PackedScene" path="res://scenes/actors/sheep_cream.tscn" id="8"]
 [ext_resource type="PackedScene" path="res://scenes/actors/sheep_spotted.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://scenes/effects/yurt_atmosphere.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/effects/wolf_forest.tscn" id="11"]
 [sub_resource type="WorldBoundaryShape2D" id="Unused"]
 [node name="Pasture" type="Node2D"]
 script = ExtResource("1")
@@ -89,6 +91,7 @@ position = Vector2(120, 123)
 position = Vector2(450, 549)
 [node name="BridgeNorth" type="Marker2D" parent="Markers"]
 position = Vector2(419, 432)
+[node name="TrailLight" parent="Markers/WolfSpawn" instance=ExtResource("7")]
 [node name="Pen" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 2
@@ -99,24 +102,6 @@ y_sort_enabled = true
 [node name="Taigan" parent="Actors" instance=ExtResource("4")]
 position = Vector2(326, 855)
 initial_direction = 1
-[node name="WaitingWolf1" parent="Actors" instance=ExtResource("7")]
-position = Vector2(169, 152)
-initial_direction = 0
-[node name="WaitingWolf2" parent="Actors" instance=ExtResource("7")]
-position = Vector2(244, 218)
-initial_direction = 0
-[node name="Sheep01" parent="Actors" instance=ExtResource("3")]
-position = Vector2(550, 247)
-initial_direction = 0
-initially_safe = true
-[node name="Sheep02" parent="Actors" instance=ExtResource("8")]
-position = Vector2(531, 288)
-initial_direction = 1
-initially_safe = true
-[node name="Sheep03" parent="Actors" instance=ExtResource("9")]
-position = Vector2(604, 271)
-initial_direction = 2
-initially_safe = true
 [node name="Sheep04" parent="Actors" instance=ExtResource("3")]
 position = Vector2(196, 736)
 initial_direction = 3
@@ -207,3 +192,5 @@ polygon = PackedVector2Array(642, -179, 665, -184, 672, -130, 667, -67, 646, -1,
 uv = PackedVector2Array(737.634, 250.341, 764.06, 244.599, 772.103, 306.61, 766.358, 378.956, 742.23, 454.747, 713.505, 455.896, 734.187, 393.885, 743.379, 320.39)
 [node name="Bark" parent="." instance=ExtResource("5")]
 [node name="Target" parent="." instance=ExtResource("6")]
+[node name="YurtAtmosphere" parent="." instance=ExtResource("10")]
+[node name="WolfForest" parent="Actors" instance=ExtResource("11")]

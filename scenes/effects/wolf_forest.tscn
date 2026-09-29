@@ -1,0 +1,147 @@
+[gd_scene load_steps=8 format=3]
+[ext_resource type="Texture2D" path="res://assets/art/felt-firs.png" id="1"]
+[ext_resource type="Script" path="res://scripts/forest.gd" id="2"]
+[ext_resource type="Shader" path="res://assets/shaders/forest_mist.gdshader" id="3"]
+[ext_resource type="Texture2D" path="res://assets/ui/blob_shadow.png" id="4"]
+[sub_resource type="ShaderMaterial" id="Mist"]
+resource_local_to_scene = true
+shader = ExtResource("3")
+[sub_resource type="Gradient" id="Falloff"]
+offsets = PackedFloat32Array(0, 0.25, 0.7, 1)
+colors = PackedColorArray(1,1,1,1, 0.75,0.75,0.75,1, 0.12,0.12,0.12,1, 0,0,0,1)
+[sub_resource type="GradientTexture2D" id="Glow"]
+gradient = SubResource("Falloff")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5,0.5)
+fill_to = Vector2(0.5,0)
+[node name="WolfForest" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("2")
+[node name="Tree0" type="Node2D" parent="."]
+position = Vector2(99,121)
+[node name="Shadow" type="Sprite2D" parent="Tree0"]
+position = Vector2(0,-2)
+scale = Vector2(0.24,0.09)
+modulate = Color(0.23,0.26,0.17,0.40)
+texture = ExtResource("4")
+[node name="Crown" type="Sprite2D" parent="Tree0"]
+position = Vector2(0,-49.18356164383562)
+scale = Vector2(0.12054794520547946,0.12054794520547946)
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(512,0,512,1024)
+region_filter_clip_enabled = true
+[node name="Tree1" type="Node2D" parent="."]
+position = Vector2(154,98)
+[node name="Shadow" type="Sprite2D" parent="Tree1"]
+position = Vector2(0,-2)
+scale = Vector2(0.24,0.09)
+modulate = Color(0.23,0.26,0.17,0.40)
+texture = ExtResource("4")
+[node name="Crown" type="Sprite2D" parent="Tree1"]
+position = Vector2(0,-46.08)
+scale = Vector2(0.11294117647058824,0.11294117647058824)
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(0,0,512,1024)
+region_filter_clip_enabled = true
+[node name="Tree2" type="Node2D" parent="."]
+position = Vector2(207,142)
+[node name="Shadow" type="Sprite2D" parent="Tree2"]
+position = Vector2(0,-2)
+scale = Vector2(0.24,0.09)
+modulate = Color(0.23,0.26,0.17,0.40)
+texture = ExtResource("4")
+[node name="Crown" type="Sprite2D" parent="Tree2"]
+position = Vector2(0,-55.89041095890411)
+scale = Vector2(0.136986301369863,0.136986301369863)
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(512,0,512,1024)
+region_filter_clip_enabled = true
+[node name="Tree3" type="Node2D" parent="."]
+position = Vector2(249,190)
+[node name="Shadow" type="Sprite2D" parent="Tree3"]
+position = Vector2(0,-2)
+scale = Vector2(0.24,0.09)
+modulate = Color(0.23,0.26,0.17,0.40)
+texture = ExtResource("4")
+[node name="Crown" type="Sprite2D" parent="Tree3"]
+position = Vector2(0,-63.839999999999996)
+scale = Vector2(0.1564705882352941,0.1564705882352941)
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(0,0,512,1024)
+region_filter_clip_enabled = true
+[node name="Tree4" type="Node2D" parent="."]
+position = Vector2(280,234)
+[node name="Shadow" type="Sprite2D" parent="Tree4"]
+position = Vector2(0,-2)
+scale = Vector2(0.24,0.09)
+modulate = Color(0.23,0.26,0.17,0.40)
+texture = ExtResource("4")
+[node name="Crown" type="Sprite2D" parent="Tree4"]
+position = Vector2(0,-55.890410958904106)
+scale = Vector2(0.136986301369863,0.136986301369863)
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(512,0,512,1024)
+region_filter_clip_enabled = true
+[node name="Tree5" type="Node2D" parent="."]
+position = Vector2(132,170)
+[node name="Shadow" type="Sprite2D" parent="Tree5"]
+position = Vector2(0,-2)
+scale = Vector2(0.24,0.09)
+modulate = Color(0.23,0.26,0.17,0.40)
+texture = ExtResource("4")
+[node name="Crown" type="Sprite2D" parent="Tree5"]
+position = Vector2(0,-69.73090909090908)
+scale = Vector2(0.1709090909090909,0.1709090909090909)
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(1024,0,512,1024)
+region_filter_clip_enabled = true
+[node name="Tree6" type="Node2D" parent="."]
+position = Vector2(169,218)
+[node name="Shadow" type="Sprite2D" parent="Tree6"]
+position = Vector2(0,-2)
+scale = Vector2(0.24,0.09)
+modulate = Color(0.23,0.26,0.17,0.40)
+texture = ExtResource("4")
+[node name="Crown" type="Sprite2D" parent="Tree6"]
+position = Vector2(0,-52.800000000000004)
+scale = Vector2(0.12941176470588237,0.12941176470588237)
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(0,0,512,1024)
+region_filter_clip_enabled = true
+[node name="Tree7" type="Node2D" parent="."]
+position = Vector2(207,265)
+[node name="Shadow" type="Sprite2D" parent="Tree7"]
+position = Vector2(0,-2)
+scale = Vector2(0.24,0.09)
+modulate = Color(0.23,0.26,0.17,0.40)
+texture = ExtResource("4")
+[node name="Crown" type="Sprite2D" parent="Tree7"]
+position = Vector2(0,-66.76363636363637)
+scale = Vector2(0.16363636363636364,0.16363636363636364)
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(1024,0,512,1024)
+region_filter_clip_enabled = true
+[node name="Moonlight" type="PointLight2D" parent="."]
+position = Vector2(141,147)
+scale = Vector2(0.85,0.85)
+enabled = false
+color = Color(0.54,0.72,1,1)
+energy = 0.0
+texture = SubResource("Glow")
+[node name="Mist" type="Sprite2D" parent="."]
+z_index = 2
+position = Vector2(58,82)
+scale = Vector2(0.96,0.83)
+centered = false
+texture = SubResource("Glow")
+material = SubResource("Mist")

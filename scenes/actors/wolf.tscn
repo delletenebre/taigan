@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3]
-[ext_resource type="Script" path="res://scripts/animal.gd" id="1"]
+[gd_scene load_steps=6 format=3]
+[ext_resource type="Script" path="res://scripts/wolf.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/art/wolf-v5.png" id="2"]
 [ext_resource type="Texture2D" path="res://assets/ui/blob_shadow.png" id="3"]
+[ext_resource type="SpriteFrames" path="res://assets/animations/wolf_trot.tres" id="4"]
 [sub_resource type="CircleShape2D" id="Footprint"]
 radius = 11.0
 [node name="Wolf" type="CharacterBody2D"]
@@ -14,8 +15,10 @@ atlas_row = 0
 atlas_columns = 2
 atlas_rows = 2
 art_width = 80.0
+frame_feet_y = PackedFloat32Array(605, 631, 570, 555)
+idle_offsets_x = PackedFloat32Array(-2.16905901116427, -5.74162679425837, -2.93460925039872, -2.5518341307815)
+trot_scales = PackedFloat32Array(0.31471982828243, 0.29039943194261, 0.2952087566363, 0.27997856252704)
 frame_regions = Array[Rect2]([Rect2(0, 0, 627, 627), Rect2(627, 0, 627, 650), Rect2(0, 627, 627, 627), Rect2(627, 650, 627, 604)])
-frame_feet_y = PackedFloat32Array(602, 629, 568, 553)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("Footprint")
 [node name="Shadow" type="Sprite2D" parent="."]
@@ -31,6 +34,10 @@ texture = ExtResource("2")
 region_enabled = true
 region_rect = Rect2(0, 0, 627, 627)
 region_filter_clip_enabled = true
+[node name="Trot" type="AnimatedSprite2D" parent="Visual"]
+visible = false
+sprite_frames = ExtResource("4")
+animation = &"trot_down_diagonal"
 [node name="Reaction" type="Node2D" parent="."]
 visible = false
 position = Vector2(0, -65)

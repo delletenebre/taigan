@@ -3,62 +3,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 def save(path,text): (ROOT/path).write_text(text)
 def poly(points): return 'PackedVector2Array('+', '.join(str(v) for p in points for v in p)+')'
-# Each animal is a separate reusable scene, with editable Sprite2D and animation.
-# Taigan and sheep have separately authored animation scenes.
-for name,row,width,speed in [('wolf',2,80,51)]:
-    species='dog' if name=='taigan' else name
-    cell_w = 627 if name=='wolf' else (362 if name=='sheep' else 313.5)
-    cell_h = 627 if name=='wolf' else (362 if name=='sheep' else 418)
-    scale=width/cell_w
-    frame_overrides = 'frame_regions = Array[Rect2]([Rect2(0, 0, 627, 627), Rect2(627, 0, 627, 650), Rect2(0, 627, 627, 627), Rect2(627, 650, 627, 604)])\nframe_feet_y = PackedFloat32Array(602, 629, 568, 553)\n' if name == "wolf" else ""
-    save(f'scenes/actors/{name}.tscn',f'''[gd_scene load_steps=5 format=3]
-[ext_resource type="Script" path="res://scripts/animal.gd" id="1"]
-[ext_resource type="Texture2D" path="res://assets/art/{'wolf-v5' if name=='wolf' else ('sheep-variants' if name=='sheep' else 'animals')}.png" id="2"]
-[ext_resource type="Texture2D" path="res://assets/ui/blob_shadow.png" id="3"]
-[sub_resource type="CircleShape2D" id="Footprint"]
-radius = {9 if name=='sheep' else 11}.0
-[node name="{name.title()}" type="CharacterBody2D"]
-collision_layer = 2
-collision_mask = 1
-script = ExtResource("1")
-species = "{species}"
-speed = {speed}.0
-atlas_row = {0 if name=='wolf' else row}
-atlas_columns = {2 if name=='wolf' else 4}
-atlas_rows = {2 if name=='wolf' else 3}
-art_width = {width}.0
-{frame_overrides}[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("Footprint")
-[node name="Shadow" type="Sprite2D" parent="."]
-position = Vector2(0, -2)
-scale = Vector2(0.24, 0.13)
-texture = ExtResource("3")
-modulate = Color(0.35, 0.29, 0.17, 0.48)
-[node name="Visual" type="Node2D" parent="."]
-[node name="Sprite" type="Sprite2D" parent="Visual"]
-position = Vector2(0, {-scale*(233 if name=='wolf' else (155 if name=='sheep' else 133)):.4f})
-scale = Vector2({scale}, {scale})
-texture = ExtResource("2")
-region_enabled = true
-region_rect = Rect2(0, {0 if name=='wolf' else row*cell_h}, {cell_w}, {cell_h})
-region_filter_clip_enabled = true
-[node name="Reaction" type="Node2D" parent="."]
-visible = false
-position = Vector2(0, -65)
-[node name="Stitch1" type="Line2D" parent="Reaction"]
-points = PackedVector2Array(-20, 4, -25, -3)
-width = 2.5
-default_color = Color(0.96, 0.91, 0.75, 1)
-begin_cap_mode = 2
-end_cap_mode = 2
-[node name="Stitch2" type="Line2D" parent="Reaction"]
-points = PackedVector2Array(-10, 0, -12, -9)
-width = 2.5
-default_color = Color(0.96, 0.91, 0.75, 1)
-begin_cap_mode = 2
-end_cap_mode = 2
-''')
-# Sheep coat scenes are authored by tools/build_sheep_animation.gd.
+# Actor scenes are authored separately with their animation builders.
 # Sewn expanding bark / target ring, authored AnimationPlayer rather than draw code.
 from math import cos,sin,pi
 for name,radius,color,duration in [('bark',155,'0.98, 0.93, 0.77, 0.85',0.65),('target',15,'0.98, 0.93, 0.77, 0.7',0.8)]:
@@ -105,16 +50,18 @@ obs={
 'PenBack':[(476,194),(513,162),(564,154),(612,165),(647,182),(660,212),(642,229),(627,200),(590,181),(545,177),(507,188),(488,210)],
 'PenRight':[(642,218),(665,213),(672,267),(667,330),(646,396),(621,397),(639,343),(647,279)]
 }
-s='''[gd_scene load_steps=11 format=3]
+s='''[gd_scene load_steps=13 format=3]
 [ext_resource type="Script" path="res://scripts/level.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/art/pasture.png" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/actors/sheep_ivory.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/actors/taigan.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/effects/bark.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://scenes/effects/target.tscn" id="6"]
-[ext_resource type="PackedScene" path="res://scenes/actors/wolf.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/effects/wolf_trail_light.tscn" id="7"]
 [ext_resource type="PackedScene" path="res://scenes/actors/sheep_cream.tscn" id="8"]
 [ext_resource type="PackedScene" path="res://scenes/actors/sheep_spotted.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://scenes/effects/yurt_atmosphere.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/effects/wolf_forest.tscn" id="11"]
 [sub_resource type="WorldBoundaryShape2D" id="Unused"]
 [node name="Pasture" type="Node2D"]
 script = ExtResource("1")
@@ -139,6 +86,7 @@ polygon = {poly(points)}
 s+='[node name="Markers" type="Node2D" parent="."]\n'
 for name,p in [('Entrance',(590,386)),('PenCenter',(577,268)),('WolfSpawn',(120,123)),('BridgeSouth',(450,549)),('BridgeNorth',(419,432))]:
     s+=f'[node name="{name}" type="Marker2D" parent="Markers"]\nposition = Vector2{p}\n'
+s+='[node name="TrailLight" parent="Markers/WolfSpawn" instance=ExtResource("7")]\n'
 s+='''[node name="Pen" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 2
@@ -150,19 +98,12 @@ y_sort_enabled = true
 position = Vector2(326, 855)
 initial_direction = 1
 '''
-s+='''[node name="WaitingWolf1" parent="Actors" instance=ExtResource("7")]
-position = Vector2(169, 152)
-initial_direction = 0
-[node name="WaitingWolf2" parent="Actors" instance=ExtResource("7")]
-position = Vector2(244, 218)
-initial_direction = 0
-'''
-spawns=[(550,247),(531,288),(604,271),(196,736),(254,714),(216,782),(409,698),(444,665),(471,710),(510,649),(532,715),(436,748),(486,760),(402,778),(457,803)]
+spawns=[(196,736),(254,714),(216,782),(409,698),(444,665),(471,710),(510,649),(532,715),(436,748),(486,760),(402,778),(457,803)]
 for i,p in enumerate(spawns):
     s+=f'''[node name="Sheep{i+1:02}" parent="Actors" instance=ExtResource("{[3,8,9][i%3]}")]
 position = Vector2{p}
 initial_direction = {i%4}
-initially_safe = {'true' if i<3 else 'false'}
+initially_safe = false
 '''
 # Foreground cutouts use the background texture coordinates directly (no re-rasterization).
 # Their local origins sit on their ground line, so Godot y-sorts actors behind them.
@@ -187,6 +128,8 @@ uv = {poly(uv)}
 s+='''[node name="Bark" parent="." instance=ExtResource("5")]
 [node name="Target" parent="." instance=ExtResource("6")]
 '''
+s+='[node name="YurtAtmosphere" parent="." instance=ExtResource("10")]\n'
+s+='[node name="WolfForest" parent="Actors" instance=ExtResource("11")]\n'
 save('scenes/levels/pasture.tscn',s)
 # HUD is entirely editable Controls, using sewn fabric image panels.
 s='''[gd_scene load_steps=13 format=3]
@@ -240,7 +183,7 @@ offset_right = {float(x+w)}
 offset_bottom = {float(y+h)}
 {extra}
 '''
-for name,x,w,text in [('SheepCount',18,208,'3/15'),('WolfTimer',522,200,'01:00')]:
+for name,x,w,text in [('SheepCount',18,208,'0/12'),('WolfTimer',522,200,'01:00')]:
     s+=rect(name,'.','TextureRect',x,17,w,68,'texture = SubResource("PanelTexture")\nexpand_mode = 1\nstretch_mode = 0\nmouse_filter = 2')
     s+=rect('Icon',name,'TextureRect',8,0,70,64,f'texture = SubResource("{"SheepIcon" if name=="SheepCount" else "WolfIcon"}")\nexpand_mode = 1\nstretch_mode = 5\nmouse_filter = 2')
     s+=rect('Text',name,'Label',78,3,w-83,60,f'text = "{text}"\ntheme_override_font_sizes/font_size = 39\nvertical_alignment = 1\nmouse_filter = 2')

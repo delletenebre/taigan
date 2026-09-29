@@ -1,0 +1,53 @@
+[gd_scene load_steps=11 format=3]
+[ext_resource type="Script" path="res://scripts/yurt_atmosphere.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/pasture.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/art/pasture-smoke-cleanplate.png" id="3"]
+[ext_resource type="Shader" path="res://assets/shaders/yurt_smoke.gdshader" id="4"]
+[sub_resource type="ShaderMaterial" id="SmokeMaterial"]
+resource_local_to_scene = true
+shader = ExtResource("4")
+shader_parameter/clean_plate = ExtResource("3")
+[sub_resource type="Gradient" id="DoorGradient"]
+offsets = PackedFloat32Array(0, 0.6, 1)
+colors = PackedColorArray(1, 0.62, 0.22, 1, 0.60, 0.23, 0.055, 1, 0.12, 0.055, 0.02, 1)
+[sub_resource type="GradientTexture2D" id="DoorTexture"]
+gradient = SubResource("DoorGradient")
+width = 64
+height = 64
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(0.5, 0)
+[sub_resource type="Gradient" id="Falloff"]
+offsets = PackedFloat32Array(0, 0.3, 0.7, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.7, 0.7, 0.7, 1, 0.12, 0.12, 0.12, 1, 0, 0, 0, 1)
+[sub_resource type="GradientTexture2D" id="Glow"]
+gradient = SubResource("Falloff")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+[sub_resource type="CanvasItemMaterial" id="Unlit"]
+light_mode = 1
+[node name="YurtAtmosphere" type="Node2D"]
+scale = Vector2(0.8703507, 0.8708134)
+script = ExtResource("1")
+[node name="Smoke" type="Sprite2D" parent="."]
+material = SubResource("SmokeMaterial")
+position = Vector2(810, 85)
+texture = ExtResource("2")
+centered = false
+region_enabled = true
+region_rect = Rect2(810, 85, 95, 100)
+[node name="Doorway" type="Polygon2D" parent="."]
+visible = false
+material = SubResource("Unlit")
+texture = SubResource("DoorTexture")
+polygon = PackedVector2Array(808, 284, 828, 288, 826, 320, 803, 315)
+uv = PackedVector2Array(0, 0, 64, 0, 64, 64, 0, 64)
+[node name="Warmth" type="PointLight2D" parent="."]
+enabled = false
+position = Vector2(816, 323)
+scale = Vector2(0.46, 0.30)
+color = Color(1, 0.61, 0.28, 1)
+energy = 0.0
+texture = SubResource("Glow")

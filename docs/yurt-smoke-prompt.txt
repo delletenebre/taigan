@@ -1,0 +1,5 @@
+Built-in imagegen prompt:
+
+Use case: precise-object-edit. Edit target: attached felt miniature game background. Remove ONLY the small white smoke plume above the yurt chimney in the upper-right corner. Fill the removed smoke with matching continuous beige felt background. Preserve the red chimney rim and dark chimney opening exactly. Preserve ALL other pixels, composition, proportions, texture, edges, positions, colors, framing and image aspect ratio. Do not redraw the scene. Empty pen remains empty. No animals, UI, text, or new objects. Output the same complete image, perfectly registered to the input. This is a clean plate for a Godot game: only the small smoke area can change; everything else must stay unchanged.
+
+Saved: assets/art/pasture-smoke-cleanplate.png. Only a 95 x 100 source-pixel region is sampled, with feathered edges; all remaining generated pixels are unused. The animated wool plume is sampled from the ORIGINAL pasture.png and bent by yurt_smoke.gdshader. No replacement smoke artwork.

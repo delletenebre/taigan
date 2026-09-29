@@ -20,6 +20,15 @@ func _ready() -> void:
 			grid.set_point_solid(Vector2i(x, y), not clear_for_actor(Vector2(x * CELL + 5, y * CELL + 5)))
 	ground.hide()
 
+func set_night(amount: float) -> void:
+	var night := clampf(amount, 0.0, 1.0)
+	modulate = Color.WHITE.lerp(Color(0.62, 0.70, 0.86), night * 0.65)
+	var light: PointLight2D = $Markers/WolfSpawn/TrailLight
+	light.enabled = night > 0.0
+	light.energy = 0.25 * smoothstep(0.0, 0.25, night)
+	$YurtAtmosphere.set_night(night)
+	$Actors/WolfForest.set_night(night)
+
 func walkable(p: Vector2) -> bool:
 	var inside := false
 	for area in ground.get_children():

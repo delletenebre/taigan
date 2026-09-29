@@ -17,7 +17,6 @@ var primary_touch: int = -1
 var last_tap: float = -10.0
 var last_tap_position := Vector2.ZERO
 var wolves: Array[FeltAnimal] = []
-var waiting_wolves: Array[FeltAnimal] = []
 var sheep: Array[FeltAnimal] = []
 @onready var level: FeltLevel = $Pasture
 @onready var dog: FeltAnimal = $Pasture/Actors/Taigan
@@ -26,9 +25,6 @@ var sheep: Array[FeltAnimal] = []
 
 func _ready() -> void:
 	for child in $Pasture/Actors.get_children():
-		if child is FeltAnimal and child.species == "wolf":
-			waiting_wolves.append(child)
-			child.state = "waiting"
 		if child is FeltAnimal and child.species == "sheep":
 			sheep.append(child)
 			if child.initially_safe:
@@ -110,14 +106,13 @@ func _physics_process(delta: float) -> void:
 			$Pasture/Target.hide()
 		else: direction = level.steer(dog.position, target)
 	dog.travel(level.safe_motion(dog.position, direction * dog.speed, delta), delta)
-	for waiting in waiting_wolves: waiting.animate_motion(delta)
 	for animal in sheep: update_sheep(animal, delta)
 	for wolf in wolves.duplicate(): update_wolf(wolf, delta)
 	if elapsed >= next_wolf and wolves.size() < 2:
 		spawn_wolf()
 		next_wolf = elapsed + wolf_interval
 	var night := clampf((elapsed - evening_seconds) / 8.0, 0.0, 1.0)
-	$Pasture.modulate = Color.WHITE.lerp(Color(0.62, 0.70, 0.86), night * 0.65)
+	level.set_night(night)
 	hud.update_values(rescued, sheep.size(), maxf(0, evening_seconds - elapsed), cooldown, lost)
 	if rescued + lost == sheep.size(): finish()
 
@@ -194,13 +189,9 @@ func bark() -> void:
 		if wolf.position.distance_to(dog.position) < 180: scare_wolf(wolf)
 
 func spawn_wolf() -> FeltAnimal:
-	var wolf: FeltAnimal
-	if not waiting_wolves.is_empty():
-		wolf = waiting_wolves.pop_front()
-	else:
-		wolf = WOLF.instantiate()
-		$Pasture/Actors.add_child(wolf)
-		wolf.position = level.wolf_spawn.position
+	var wolf: FeltAnimal = WOLF.instantiate()
+	$Pasture/Actors.add_child(wolf)
+	wolf.position = level.wolf_spawn.position
 	wolf.state = "hunting"
 	wolves.append(wolf)
 	$HowlSound.play()

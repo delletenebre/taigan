@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3]
+
+[sub_resource type="Gradient" id="Falloff"]
+offsets = PackedFloat32Array(0, 0.25, 0.65, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.8, 0.8, 0.8, 1, 0.22, 0.22, 0.22, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="Glow"]
+gradient = SubResource("Falloff")
+width = 512
+height = 512
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="TrailLight" type="PointLight2D"]
+position = Vector2(62, 67)
+rotation = -0.65
+scale = Vector2(0.26, 0.60)
+enabled = false
+color = Color(0.82, 0.89, 1, 1)
+energy = 0.0
+texture = SubResource("Glow")
