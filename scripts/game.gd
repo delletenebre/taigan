@@ -30,8 +30,14 @@ var sheep: Array[FeltAnimal] = []
 func _ready() -> void:
 	get_viewport().size_changed.connect(layout_window)
 	layout_window()
+	var config: Dictionary = Session.LEVELS[Session.selected_level]
+	evening_seconds = config.day
+	wolf_interval = config.interval
 	for child in $Pasture/Actors.get_children():
 		if child is FeltAnimal and child.species == "sheep":
+			if sheep.size() >= config.sheep:
+				child.queue_free()
+				continue
 			sheep.append(child)
 			if child.initially_safe:
 				rescued += 1
@@ -43,7 +49,8 @@ func _ready() -> void:
 	hud.bark_requested.connect(bark)
 	hud.restart_requested.connect(func(): get_tree().reload_current_scene())
 	hud.resume_requested.connect(toggle_pause)
-	hud.update_values(rescued, sheep.size(), evening_seconds, 0, lost)
+	hud.home_requested.connect(Session.home)
+	hud.update_values(rescued, sheep.size(), evening_seconds, 0, lost, level.night_strength)
 	if "--smoke-test" in OS.get_cmdline_user_args():
 		var test_runner = load("res://tests/smoke.gd").new()
 		await test_runner.run(self)
@@ -62,8 +69,12 @@ func _process(_delta: float) -> void:
 	$WindowBackground/Cloth.modulate = level.modulate
 
 func _unhandled_input(event: InputEvent) -> void:
+	if (event is InputEventMouseButton or event is InputEventMouseMotion) and event.device == -1: return
+	if event is InputEventScreenTouch and hud.blocks_touch(event.position): return
 	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode in [KEY_ESCAPE, KEY_P]: toggle_pause()
+		if event.keycode in [KEY_ESCAPE, KEY_P]:
+			if is_instance_valid(hud.settings_window): hud.close_settings()
+			else: toggle_pause()
 		if event.keycode == KEY_SPACE: bark()
 		if event.keycode == KEY_R and complete: get_tree().reload_current_scene()
 	if paused or complete: return
@@ -105,7 +116,7 @@ func skip_to_night() -> void:
 	if not timer_skip_enabled or paused or complete or elapsed >= evening_seconds: return
 	elapsed = maxf(elapsed, evening_seconds - 4.0)
 	level.set_night(night_amount())
-	hud.update_values(rescued, sheep.size(), maxf(0.0, evening_seconds - elapsed), cooldown, lost)
+	hud.update_values(rescued, sheep.size(), maxf(0.0, evening_seconds - elapsed), cooldown, lost, level.night_strength)
 
 func night_amount() -> float:
 	var full_night_at := maxf(0.0, evening_seconds - full_night_lead)
@@ -140,10 +151,10 @@ func _physics_process(delta: float) -> void:
 	dog.travel(level.safe_motion(dog.position, direction * dog.speed, delta), delta)
 	for animal in sheep: update_sheep(animal, delta)
 	for wolf in wolves.duplicate(): update_wolf(wolf, delta)
-	if elapsed >= next_wolf and wolves.size() < 2:
+	if elapsed >= next_wolf and wolves.size() < Session.LEVELS[Session.selected_level].wolves:
 		spawn_wolf()
 		next_wolf = elapsed + wolf_interval
-	hud.update_values(rescued, sheep.size(), maxf(0, evening_seconds - elapsed), cooldown, lost)
+	hud.update_values(rescued, sheep.size(), maxf(0, evening_seconds - elapsed), cooldown, lost, level.night_strength)
 	if rescued + lost == sheep.size(): finish()
 
 func update_sheep(animal: FeltAnimal, delta: float) -> void:
@@ -246,7 +257,7 @@ func bark() -> void:
 				animal.panic = 1.35
 				animal.bark_direction = (animal.position - dog.position).normalized()
 	for wolf in wolves:
-		if wolf.position.distance_to(dog.position) < 180: scare_wolf(wolf)
+		if wolf.position.distance_to(dog.position) < 180: scare_wolf(wolf, true)
 
 func spawn_wolf() -> FeltAnimal:
 	var wolf: FeltAnimal = WOLF.instantiate()
@@ -258,18 +269,48 @@ func spawn_wolf() -> FeltAnimal:
 	$HowlSound.play()
 	return wolf
 
-func scare_wolf(wolf: FeltAnimal) -> void:
-	wolf.scared = 4.5
+func scare_wolf(wolf: FeltAnimal, from_bark: bool = false) -> void:
+	wolf.scared = 1.4 if from_bark else 4.5
+	if from_bark:
+		wolf.bark_retreat = true
+		wolf.bark_retreat_goal = short_retreat_goal(wolf)
 	if is_instance_valid(wolf.carrying):
 		wolf.carrying.state = "grazing"
 		wolf.carrying.position = level.grid.get_point_position(level.nearest_cell(wolf.position + Vector2(25, 25)))
 		wolf.carrying.show()
 		wolf.carrying = null
 
+func short_retreat_goal(wolf: FeltAnimal) -> Vector2:
+	var away := (wolf.position - dog.position).normalized()
+	if away.is_zero_approx(): away = Vector2.UP
+	var best := wolf.position
+	var best_distance := 0.0
+	# Find a short clear stretch away from the dog, staying on dry ground.
+	for angle in [0.0, -PI / 4.0, PI / 4.0, -PI / 2.0, PI / 2.0]:
+		var direction := away.rotated(angle)
+		for step in range(1, int(wolf.bark_retreat_distance / 5.0) + 1):
+			var point := wolf.position + direction * step * 5.0
+			if not level.clear_for_actor(point): break
+			var distance := point.distance_squared_to(dog.position)
+			if distance > best_distance:
+				best_distance = distance
+				best = point
+	return best
+
 func update_wolf(wolf: FeltAnimal, delta: float) -> void:
 	wolf.set_night(level.night_strength)
 	wolf.scared = maxf(0, wolf.scared - delta)
-	if wolf.position.distance_to(dog.position) < 75: scare_wolf(wolf)
+	if wolf.position.distance_to(dog.position) < 75 and not wolf.bark_retreat: scare_wolf(wolf)
+	if wolf.bark_retreat:
+		var offset: Vector2 = wolf.bark_retreat_goal - wolf.position
+		if offset.length() > 6.0 and wolf.scared > 0.0:
+			var speed: float = minf(wolf.speed * wolf.bark_retreat_speed, offset.length() / maxf(delta, 0.00001))
+			wolf.travel(level.safe_motion(wolf.position, offset.normalized() * speed, delta), delta)
+		else:
+			wolf.scared = minf(wolf.scared, 0.35)
+			wolf.travel(Vector2.ZERO, delta)
+			if wolf.scared <= 0.0: wolf.bark_retreat = false
+		return
 	var goal := level.wolf_spawn.position
 	if not is_instance_valid(wolf.carrying) and wolf.scared <= 0:
 		var closest: FeltAnimal
@@ -312,6 +353,8 @@ func finish() -> void:
 	pointer_down = false
 	if lost == 0: $WinSound.play()
 	else: $LoseSound.play()
+	Session.record_result(rescued)
+	level.process_mode = Node.PROCESS_MODE_DISABLED
 	hud.show_result(rescued, sheep.size(), lost)
 
 func _capture() -> void:

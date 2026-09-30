@@ -34,6 +34,8 @@ func run(game: Node2D) -> void:
 	load("res://tests/sheep_animation.gd").new().run(game, check)
 	load("res://tests/wolf_animation.gd").new().run(game, check)
 	load("res://tests/sheep_sleep.gd").new().run(game, check)
+	load("res://tests/sheep_wake.gd").new().run(game, check)
+	await load("res://tests/wolf_retreat.gd").new().run(game, check)
 	check(game.sheep.size() == 12 and game.rescued == 0, "12 sheep to collect and an empty starting enclosure")
 	check(not level.walkable(Vector2(250, 482)), "river outside bridge is blocked")
 	check(level.walkable(Vector2(430, 491)), "wooden bridge is walkable")
@@ -109,9 +111,11 @@ func run(game: Node2D) -> void:
 	game.elapsed = game.evening_seconds - 7.0
 	game._physics_process(0.01)
 	check(level.night_strength > 0.45 and level.night_strength < 0.55 and game.wolves.is_empty(), "dusk darkens the scene while the countdown is still running")
+	check(game.hud.get_node("WolfTimer/Icon/Sun").visible and game.hud.get_node("WolfTimer/Icon/Moon").visible, "dusk animates the sun and moon together during the handover")
 	game.elapsed = game.evening_seconds - 2.0
 	game._physics_process(0.01)
 	check(is_equal_approx(level.night_strength,1.0) and game.wolves.is_empty(), "full darkness arrives two seconds before wolves")
+	check(not game.hud.get_node("WolfTimer/Icon/Sun").visible and game.hud.get_node("WolfTimer/Icon/Moon").visible, "night timer shows only the moon")
 	game.elapsed = game.evening_seconds - 0.01
 	game.next_wolf = game.evening_seconds
 	var wolves_before: int = game.wolves.size()

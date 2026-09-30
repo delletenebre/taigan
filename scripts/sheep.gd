@@ -3,6 +3,9 @@ extends FeltAnimal
 const VIEWS: Array[int] = [0, 0, 2, 0, 0, 1, 3, 1]
 const MIRROR: Array[bool] = [false, false, false, true, true, false, false, true]
 const TROT_NAMES: Array[StringName] = [&"trot_down_diagonal", &"trot_up_diagonal", &"trot_down", &"trot_up"]
+const WAKE_HOP_DURATION := 0.64
+const WAKE_CROUCH_DURATION := 0.08
+const WAKE_FLIGHT_DURATION := 0.34
 
 @export var stride_length: float = 38.0
 @export var trot_scales := PackedFloat32Array([0.2, 0.2, 0.2, 0.2])
@@ -19,7 +22,13 @@ var sleep_in_pen := false
 var sleep_blend := 0.0
 var sleep_clock := 0.0
 var sleep_material := ShaderMaterial.new()
+var wake_hop_clock := WAKE_HOP_DURATION
+var wake_hop_height := 17.0
+var wake_hop_tilt := 0.0
 @onready var trot: AnimatedSprite2D = $Visual/Trot
+@onready var shadow: Sprite2D = $Shadow
+@onready var shadow_scale := shadow.scale
+@onready var shadow_alpha := shadow.modulate.a
 
 func _ready() -> void:
 	super._ready()
@@ -57,11 +66,16 @@ func update_sleep(delta: float, night: bool, allowed: bool) -> void:
 
 func fall_asleep() -> void:
 	asleep = true
+	wake_hop_clock = WAKE_HOP_DURATION
 	velocity = Vector2.ZERO
 	panic = 0.0
 	sleep_clock = 0.0
 
 func wake_from_bark() -> void:
+	if asleep and state in ["grazing", "safe"]:
+		wake_hop_clock = 0.0
+		wake_hop_height = randf_range(15.0, 19.0)
+		wake_hop_tilt = deg_to_rad(randf_range(3.0, 5.0)) * (-1.0 if get_index() % 2 == 0 else 1.0)
 	asleep = false
 	# Even sheep in the pen stay awake for a fresh delay after a bark.
 	reset_sleep_timer()
@@ -73,17 +87,23 @@ func set_facing(direction: int, flip: bool) -> void:
 
 func travel(motion: Vector2, delta: float) -> void:
 	var before := position
-	velocity = Vector2.ZERO if asleep else motion
+	var planted := wake_hop_clock < WAKE_CROUCH_DURATION or (wake_hop_clock >= WAKE_CROUCH_DURATION + WAKE_FLIGHT_DURATION and wake_hop_clock < WAKE_HOP_DURATION)
+	velocity = Vector2.ZERO if asleep or planted else motion
 	move_and_slide()
 	velocity = (position - before) / maxf(delta, 0.00001)
 	animate_motion(delta)
 
 func animate_motion(delta: float) -> void:
+	if asleep or state in ["carried", "lost"]:
+		wake_hop_clock = WAKE_HOP_DURATION
+	else:
+		wake_hop_clock = minf(WAKE_HOP_DURATION, wake_hop_clock + delta)
 	var resting := asleep and state != "carried" and state != "lost"
-	sleep_blend = move_toward(sleep_blend, 1.0 if resting else 0.0, delta * 2.5)
+	var sleep_speed := 12.5 if wake_hop_clock < WAKE_HOP_DURATION else 2.5
+	sleep_blend = move_toward(sleep_blend, 1.0 if resting else 0.0, delta * sleep_speed)
 	if resting or sleep_blend > 0.0: sleep_clock += delta
 	var actual_speed := 0.0 if asleep else velocity.length()
-	moving = actual_speed > (0.6 if moving else 1.5) and state != "carried" and state != "lost"
+	moving = actual_speed > (0.6 if moving else 1.5) and state != "carried" and state != "lost" and wake_hop_clock >= WAKE_HOP_DURATION
 	if moving:
 		last_motion = velocity
 		heading = rotate_toward(heading, velocity.angle(), deg_to_rad(480.0) * delta)
@@ -113,7 +133,38 @@ func show_pose(actual_speed: float) -> void:
 	var breath := sin(sleep_clock * TAU / 3.4)
 	visual.scale = Vector2(1.0 + breath * 0.006 * sleep_blend, 1.0 + breath * 0.012 * sleep_blend)
 	visual.rotation = 0.0
+	show_wake_hop()
 	$Sleep.visible = sleep_blend > 0.001 and state != "carried" and state != "lost"
 	$Sleep.animate_sleep(sleep_clock, sleep_blend)
 	$Reaction.visible = not asleep and panic > 0.1 and state == "grazing"
-	$Shadow.visible = state != "carried" and state != "lost"
+	$Reaction.position.y = -65.0 + visual.position.y
+	shadow.visible = state != "carried" and state != "lost"
+
+func show_wake_hop() -> void:
+	# The body springs from its feet; the shadow stays on the pasture.
+	shadow.scale = shadow_scale
+	shadow.modulate.a = shadow_alpha
+	if wake_hop_clock >= WAKE_HOP_DURATION: return
+	var lift := 0.0
+	if wake_hop_clock < WAKE_CROUCH_DURATION:
+		var squeeze := sin(wake_hop_clock / WAKE_CROUCH_DURATION * PI * 0.5)
+		visual.scale *= Vector2(1.0 + 0.10 * squeeze, 1.0 - 0.16 * squeeze)
+	elif wake_hop_clock < WAKE_CROUCH_DURATION + WAKE_FLIGHT_DURATION:
+		var flight := (wake_hop_clock - WAKE_CROUCH_DURATION) / WAKE_FLIGHT_DURATION
+		lift = wake_hop_height * 4.0 * flight * (1.0 - flight)
+		var stretch := Vector2(0.94, 1.10)
+		if flight < 0.18:
+			visual.scale *= Vector2(1.10, 0.84).lerp(stretch, smoothstep(0.0, 0.18, flight))
+		else:
+			visual.scale *= stretch.lerp(Vector2.ONE, smoothstep(0.18, 0.60, flight))
+		visual.rotation = wake_hop_tilt * sin(flight * PI)
+	else:
+		var landing := (wake_hop_clock - WAKE_CROUCH_DURATION - WAKE_FLIGHT_DURATION) / (WAKE_HOP_DURATION - WAKE_CROUCH_DURATION - WAKE_FLIGHT_DURATION)
+		var settle := sin(landing * TAU) * exp(-3.0 * landing)
+		visual.scale *= Vector2(1.0 + 0.10 * settle, 1.0 - 0.16 * settle)
+		visual.rotation = wake_hop_tilt * 0.4 * settle
+		lift = maxf(0.0, -settle) * 2.0
+	visual.position.y -= lift
+	var airborne := lift / wake_hop_height
+	shadow.scale *= 1.0 - 0.22 * airborne
+	shadow.modulate.a *= 1.0 - 0.28 * airborne

@@ -1,0 +1,147 @@
+{
+  "brand": {
+    "ru": "ТАЙГАН",
+    "ky": "ТАЙГАН",
+    "en": "TAIGAN"
+  },
+  "tagline": {
+    "ru": "Маленький пёс. Большая забота.",
+    "ky": "Кичинекей ит. Чоң камкордук.",
+    "en": "Little dog. Big heart."
+  },
+  "play": {
+    "ru": "Играть",
+    "ky": "Ойноо",
+    "en": "Play"
+  },
+  "settings": {
+    "ru": "Настройки",
+    "ky": "Жөндөөлөр",
+    "en": "Settings"
+  },
+  "back": {
+    "ru": "Назад",
+    "ky": "Артка",
+    "en": "Back"
+  },
+  "home": {
+    "ru": "Главное меню",
+    "ky": "Башкы меню",
+    "en": "Main menu"
+  },
+  "resume": {
+    "ru": "Продолжить",
+    "ky": "Улантуу",
+    "en": "Continue"
+  },
+  "restart": {
+    "ru": "Начать заново",
+    "ky": "Кайра баштоо",
+    "en": "Restart"
+  },
+  "pause": {
+    "ru": "Привал",
+    "ky": "Эс алуу",
+    "en": "Take a breath"
+  },
+  "pause_note": {
+    "ru": "Отара подождёт. Отдохни немного.",
+    "ky": "Отор күтөт. Бир аз эс ал.",
+    "en": "The flock can wait. Take a little rest."
+  },
+  "level_1": {
+    "ru": "Уровень 1",
+    "ky": "1-деңгээл",
+    "en": "Level 1"
+  },
+  "best": {
+    "ru": "Лучший результат: %d / %d",
+    "ky": "Эң жакшы жыйынтык: %d / %d",
+    "en": "Best: %d / %d"
+  },
+  "language": {
+    "ru": "Язык",
+    "ky": "Тил",
+    "en": "Language"
+  },
+  "sound": {
+    "ru": "Звук",
+    "ky": "Үн",
+    "en": "Audio"
+  },
+  "master": {
+    "ru": "Общая громкость",
+    "ky": "Жалпы үн",
+    "en": "Master volume"
+  },
+  "music": {
+    "ru": "Музыка",
+    "ky": "Музыка",
+    "en": "Music"
+  },
+  "effects": {
+    "ru": "Эффекты",
+    "ky": "Үн эффекттери",
+    "en": "Sound effects"
+  },
+  "saved": {
+    "ru": "Изменения сохраняются сразу",
+    "ky": "Өзгөртүүлөр дароо сакталат",
+    "en": "Changes are saved automatically"
+  },
+  "goal": {
+    "ru": "Собери всю отару",
+    "ky": "Бардык койду чогулт",
+    "en": "Bring the whole flock home"
+  },
+  "lost": {
+    "ru": "В загон: %d  ·  Унесено: %d",
+    "ky": "Короо: %d  ·  Уурдалды: %d",
+    "en": "Home: %d  ·  Taken: %d"
+  },
+  "bark": {
+    "ru": "Гав!",
+    "ky": "Үр!",
+    "en": "Woof!"
+  },
+  "hint": {
+    "ru": "Веди касанием · Двойной тап — лай",
+    "ky": "Тийип башкар · Эки тап — үрүү",
+    "en": "Touch to move · Double tap to bark"
+  },
+  "win": {
+    "ru": "Вся отара дома!",
+    "ky": "Отор толук короодо!",
+    "en": "The whole flock is home!"
+  },
+  "result": {
+    "ru": "Выпас окончен",
+    "ky": "Жайыт аяктады",
+    "en": "Pasture complete"
+  },
+  "result_count": {
+    "ru": "В безопасности %d из %d овец.",
+    "ky": "%d / %d кой аман калды.",
+    "en": "%d of %d sheep are safe."
+  },
+  "win_note": {
+    "ru": "Тайган заслужил отдых.",
+    "ky": "Тайган эс алууга татыктуу.",
+    "en": "Taigan has earned a rest."
+  },
+  "lose_note": {
+    "ru": "Попробуй собрать всех до прихода волков.",
+    "ky": "Карышкырлар келгенче баарын чогултуп көр.",
+    "en": "Try bringing everyone home before the wolves."
+  },
+  "controls": {
+    "ru": "Касайся земли, чтобы вести тайгана.\nОбходи овец сзади и гони к мосту.\nДвойной тап — лай и спасение от волка.",
+    "ky": "Тайганды жетелөө үчүн жерге тий.\nКойлорду артынан көпүрөгө айда.\nЭки тап — үрүү, карышкырдан куткаруу.",
+    "en": "Touch the ground to guide Taigan.\nHerd sheep from behind toward the bridge.\nDouble tap to bark and scare off wolves."
+  },
+  "controls_title": {
+    "ru": "Как играть",
+    "ky": "Кантип ойноо керек",
+    "en": "How to play"
+  }
+}

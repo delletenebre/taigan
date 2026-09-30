@@ -1,10 +1,14 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=16 format=3]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/art/felt-panel.png" id="2"]
 [ext_resource type="FontFile" path="res://assets/fonts/PT_Sans-Web-Regular.ttf" id="3"]
 [ext_resource type="Texture2D" path="res://assets/art/sheep-variants.png" id="4"]
 [ext_resource type="Texture2D" path="res://assets/ui/ornament.png" id="5"]
-[ext_resource type="Texture2D" path="res://assets/ui/wolf-head.png" id="6"]
+[ext_resource type="Texture2D" path="res://assets/ui/sun-felt.png" id="6"]
+[ext_resource type="Texture2D" path="res://assets/ui/moon-felt.png" id="7"]
+[ext_resource type="Shader" path="res://assets/shaders/hud_light_felt.gdshader" id="8"]
+[sub_resource type="ShaderMaterial" id="LightFelt"]
+shader = ExtResource("8")
 [sub_resource type="AtlasTexture" id="PanelTexture"]
 atlas = ExtResource("2")
 region = Rect2(36, 285, 1464, 450)
@@ -17,9 +21,6 @@ texture_margin_bottom = 0.0
 [sub_resource type="AtlasTexture" id="SheepIcon"]
 atlas = ExtResource("4")
 region = Rect2(40, 65, 304, 287)
-[sub_resource type="AtlasTexture" id="WolfIcon"]
-atlas = ExtResource("6")
-region = Rect2(90, 105, 1074, 1020)
 [sub_resource type="Theme" id="Theme"]
 default_font = ExtResource("3")
 default_font_size = 30
@@ -41,6 +42,7 @@ mouse_filter = 2
 theme = SubResource("Theme")
 script = ExtResource("1")
 [node name="SheepCount" type="TextureRect" parent="."]
+material = SubResource("LightFelt")
 layout_mode = 0
 offset_left = 18.0
 offset_top = 17.0
@@ -67,10 +69,12 @@ offset_top = 3.0
 offset_right = 203.0
 offset_bottom = 63.0
 text = "0/12"
+theme_override_colors/font_color = Color(0.25, 0.15, 0.09, 1)
 theme_override_font_sizes/font_size = 39
 vertical_alignment = 1
 mouse_filter = 2
 [node name="WolfTimer" type="TextureRect" parent="."]
+material = SubResource("LightFelt")
 layout_mode = 0
 offset_left = 522.0
 offset_top = 17.0
@@ -80,13 +84,34 @@ texture = SubResource("PanelTexture")
 expand_mode = 1
 stretch_mode = 0
 mouse_filter = 2
-[node name="Icon" type="TextureRect" parent="WolfTimer"]
+[node name="Icon" type="Control" parent="WolfTimer"]
 layout_mode = 0
 offset_left = 8.0
 offset_top = 0.0
 offset_right = 78.0
 offset_bottom = 64.0
-texture = SubResource("WolfIcon")
+clip_contents = true
+mouse_filter = 2
+[node name="Sun" type="TextureRect" parent="WolfTimer/Icon"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 67.0
+offset_bottom = 61.0
+pivot_offset = Vector2(32, 29)
+texture = ExtResource("6")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+[node name="Moon" type="TextureRect" parent="WolfTimer/Icon"]
+visible = false
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 67.0
+offset_bottom = 61.0
+pivot_offset = Vector2(32, 29)
+texture = ExtResource("7")
 expand_mode = 1
 stretch_mode = 5
 mouse_filter = 2
@@ -97,6 +122,7 @@ offset_top = 3.0
 offset_right = 195.0
 offset_bottom = 63.0
 text = "01:00"
+theme_override_colors/font_color = Color(0.25, 0.15, 0.09, 1)
 theme_override_font_sizes/font_size = 39
 vertical_alignment = 1
 mouse_filter = 2
@@ -114,6 +140,7 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 tooltip_text = "Для теста: до ночи не больше 4 секунд"
 [node name="Pause" type="Button" parent="."]
+flat = true
 layout_mode = 0
 offset_left = 735.0
 offset_top = 17.0
@@ -121,45 +148,20 @@ offset_right = 801.0
 offset_bottom = 85.0
 text = "Ⅱ"
 theme_override_font_sizes/font_size = 38
-[node name="Goal" type="TextureRect" parent="."]
+theme_override_colors/font_color = Color(0.25, 0.15, 0.09, 1)
+theme_override_colors/font_hover_color = Color(0.40, 0.24, 0.13, 1)
+theme_override_styles/normal = SubResource("TimerHitArea")
+theme_override_styles/hover = SubResource("TimerHitArea")
+theme_override_styles/pressed = SubResource("TimerHitArea")
+[node name="Background" type="TextureRect" parent="Pause"]
+show_behind_parent = true
+material = SubResource("LightFelt")
 layout_mode = 0
-offset_left = 192.0
-offset_top = 1365.0
-offset_right = 627.0
-offset_bottom = 1427.0
+offset_right = 66.0
+offset_bottom = 68.0
 texture = SubResource("PanelTexture")
 expand_mode = 1
 stretch_mode = 0
-mouse_filter = 2
-[node name="Text" type="Label" parent="Goal"]
-layout_mode = 0
-offset_left = 44.0
-offset_top = 0.0
-offset_right = 391.0
-offset_bottom = 62.0
-text = "Собери всю отару"
-horizontal_alignment = 1
-vertical_alignment = 1
-mouse_filter = 2
-[node name="Left" type="TextureRect" parent="Goal"]
-layout_mode = 0
-offset_left = 10.0
-offset_top = 15.0
-offset_right = 42.0
-offset_bottom = 47.0
-texture = ExtResource("5")
-expand_mode = 1
-stretch_mode = 5
-mouse_filter = 2
-[node name="Right" type="TextureRect" parent="Goal"]
-layout_mode = 0
-offset_left = 391.0
-offset_top = 15.0
-offset_right = 423.0
-offset_bottom = 47.0
-texture = ExtResource("5")
-expand_mode = 1
-stretch_mode = 5
 mouse_filter = 2
 [node name="Bark" type="Button" parent="."]
 layout_mode = 0
@@ -170,17 +172,6 @@ offset_bottom = 1352.0
 text = "Гав!"
 tooltip_text = "Пробел или двойной тап — лай"
 theme_override_font_sizes/font_size = 23
-[node name="Hint" type="Label" parent="."]
-layout_mode = 0
-offset_left = 184.0
-offset_top = 1425.0
-offset_right = 644.0
-offset_bottom = 1451.0
-text = "Веди касанием · Двойной тап — лай"
-horizontal_alignment = 1
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.3, 0.23, 0.16, 0.85)
-mouse_filter = 2
 [node name="Overlay" type="ColorRect" parent="."]
 layout_mode = 0
 offset_left = 0.0

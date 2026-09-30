@@ -5,12 +5,16 @@ const MIRROR: Array[bool] = [false, false, false, true, true, false, false, true
 const TROT_NAMES: Array[StringName] = [&"trot_down_diagonal", &"trot_up_diagonal", &"trot_down", &"trot_up"]
 @export var stride_length: float = 46.0
 @export var turn_speed_degrees: float = 480.0
+@export var bark_retreat_distance: float = 85.0
+@export var bark_retreat_speed: float = 2.0
 @export var trot_scales := PackedFloat32Array([0.3, 0.3, 0.3, 0.3])
 @export var idle_offsets_x := PackedFloat32Array([0.0, 0.0, 0.0, 0.0])
 var stride_distance := 0.0
 var heading := PI / 4.0
 var sector := 1
 var moving := false
+var bark_retreat := false
+var bark_retreat_goal := Vector2.ZERO
 @onready var trot: AnimatedSprite2D = $Visual/Trot
 
 func _ready() -> void:

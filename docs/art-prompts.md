@@ -41,3 +41,15 @@ Extract and recreate the dark brown stitched felt UI plate from the reference's 
 `assets/ui/wolf-head.png`, built-in image_gen.
 
 Extract/recreate only the wolf head icon from the top timer badge of the larger reference. Isolated front-view gray felt head with narrow ivory muzzle, small black nose, yellow eyes, slightly stern expression, triangular ears and gray felt cheek tufts. Transparent alpha; no badge, text, body, shoulders or neck stump. Preserve the reference UI icon proportions.
+
+## Солнце и луна для верхнего таймера — 30 сентября 2026
+
+Built-in imagegen, transparent background. Файлы: `assets/ui/sun-felt.png`, `assets/ui/moon-felt.png`. Светлый фон плашек создан шейдером существующей текстуры, без её перерисовки.
+
+### Солнце
+
+Use case: stylized-concept. Asset type: one small HUD sun icon for a handmade wool felt pastoral mobile game. Generate a SINGLE centered SUN, circular warm golden-yellow felt disc with 8 short rounded padded felt rays, softly needle-felted wool fibers, slightly raised sewn edges and subtle natural shading from upper left. No face, no text, no separate stars or objects. Readable bold silhouette at 40 pixels. Front-facing flat orthographic appliqué, warm ochre outer seams so it contrasts against a pale cream felt HUD background. Restrained tactile game art, no plastic, no glossy 3D, no emoji, no photographic background, no drop shadow outside the object. Square transparent canvas, icon occupies 82 percent of canvas width and height, centered. Genuinely transparent background.
+
+### Луна
+
+Use case: stylized-concept. Asset type: one small HUD moon icon for a handmade wool felt pastoral mobile game. Generate a SINGLE centered CRESCENT MOON, opening facing right, made of pale ivory softly needle-felted wool with a thick rounded crescent body, subtle warm gray-blue stitched outline and soft natural shading from upper left. No face, no text, no stars or separate objects. Readable bold silhouette at 40 pixels. Front-facing flat orthographic felt appliqué, outer seams gray-blue so it contrasts against a pale cream felt HUD background. Restrained tactile game art, no plastic, no glossy 3D, no emoji, no photographic background, no drop shadow outside the object. Square transparent canvas, icon occupies 78 percent of canvas width and height, centered. Genuinely transparent background.
