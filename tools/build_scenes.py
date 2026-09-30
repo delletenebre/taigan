@@ -50,7 +50,7 @@ obs={
 'PenBack':[(476,194),(513,162),(564,154),(612,165),(647,182),(660,212),(642,229),(627,200),(590,181),(545,177),(507,188),(488,210)],
 'PenRight':[(642,218),(665,213),(672,267),(667,330),(646,396),(621,397),(639,343),(647,279)]
 }
-s='''[gd_scene load_steps=13 format=3]
+s='''[gd_scene load_steps=17 format=3]
 [ext_resource type="Script" path="res://scripts/level.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/art/pasture.png" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/actors/sheep_ivory.tscn" id="3"]
@@ -62,12 +62,20 @@ s='''[gd_scene load_steps=13 format=3]
 [ext_resource type="PackedScene" path="res://scenes/actors/sheep_spotted.tscn" id="9"]
 [ext_resource type="PackedScene" path="res://scenes/effects/yurt_atmosphere.tscn" id="10"]
 [ext_resource type="PackedScene" path="res://scenes/effects/wolf_forest.tscn" id="11"]
+[ext_resource type="Shader" path="res://assets/shaders/island_cutout.gdshader" id="12"]
+[ext_resource type="Texture2D" path="res://assets/art/pasture-cutout.png" id="13"]
+[ext_resource type="PackedScene" path="res://scenes/effects/island_shadow.tscn" id="14"]
+[sub_resource type="ShaderMaterial" id="Cutout"]
+shader = ExtResource("12")
+shader_parameter/silhouette = ExtResource("13")
 [sub_resource type="WorldBoundaryShape2D" id="Unused"]
 [node name="Pasture" type="Node2D"]
 script = ExtResource("1")
+[node name="IslandShadow" parent="." instance=ExtResource("14")]
 [node name="Artwork" type="Sprite2D" parent="."]
-texture = ExtResource("2")
+material = SubResource("Cutout")
 centered = false
+texture = ExtResource("2")
 scale = Vector2(0.8703507, 0.8708134)
 [node name="Walkable" type="Node2D" parent="."]
 visible = false
@@ -202,16 +210,18 @@ s+=rect('Description','Overlay/Card','Label',30,112,529,158,'text = ""\nhorizont
 s+=rect('Resume','Overlay/Card','Button',65,285,459,62,'text = "Вернуться к отаре"')
 s+=rect('Restart','Overlay/Card','Button',65,361,459,62,'text = "Начать заново"')
 save('scenes/ui/hud.tscn',s)
-s='''[gd_scene load_steps=11 format=3]
+s='''[gd_scene load_steps=12 format=3]
 [ext_resource type="Script" path="res://scripts/game.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/levels/pasture.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="3"]
 '''
 for i,name in enumerate(['bark','howl','pen','win','lose'],4): s+=f'[ext_resource type="AudioStream" path="res://assets/audio/{name}.wav" id="{i}"]\n'
 s+='[ext_resource type="PackedScene" path="res://scenes/effects/capture_voices.tscn" id="9"]\n'
+s+='[ext_resource type="PackedScene" path="res://scenes/effects/window_background.tscn" id="10"]\n'
 s+='''[sub_resource type="World2D" id="World"]
 [node name="Taigan" type="Node2D"]
 script = ExtResource("1")
+[node name="WindowBackground" parent="." instance=ExtResource("10")]
 [node name="Pasture" parent="." instance=ExtResource("2")]
 [node name="HUD" type="CanvasLayer" parent="."]
 [node name="Interface" parent="HUD" instance=ExtResource("3")]

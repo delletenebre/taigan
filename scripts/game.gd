@@ -5,6 +5,7 @@ extends Node2D
 @export var full_night_lead: float = 2.0
 @export var wolf_interval: float = 24.0
 @export var timer_skip_enabled := true
+const FIELD_SIZE := Vector2(819, 1456)
 const WOLF := preload("res://scenes/actors/wolf.tscn")
 var elapsed: float = 0.0
 var cooldown: float = 0.0
@@ -27,6 +28,8 @@ var sheep: Array[FeltAnimal] = []
 @onready var bark_effect: Node2D = $Pasture/Bark
 
 func _ready() -> void:
+	get_viewport().size_changed.connect(layout_window)
+	layout_window()
 	for child in $Pasture/Actors.get_children():
 		if child is FeltAnimal and child.species == "sheep":
 			sheep.append(child)
@@ -47,6 +50,17 @@ func _ready() -> void:
 	if "--capture" in OS.get_cmdline_user_args():
 		_capture.call_deferred()
 
+func layout_window() -> void:
+	var window_size := get_viewport_rect().size
+	position = (window_size - FIELD_SIZE) * 0.5
+	$HUD.offset = position
+	var cloth: TextureRect = $WindowBackground/Cloth
+	cloth.material.set_shader_parameter("window_size", window_size)
+	cloth.material.set_shader_parameter("field_offset", position)
+
+func _process(_delta: float) -> void:
+	$WindowBackground/Cloth.modulate = level.modulate
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode in [KEY_ESCAPE, KEY_P]: toggle_pause()
@@ -55,22 +69,22 @@ func _unhandled_input(event: InputEvent) -> void:
 	if paused or complete: return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		pointer_down = event.pressed
-		if event.pressed: aim(event.position)
+		if event.pressed: aim(to_local(event.position))
 	if event is InputEventMouseMotion and pointer_down:
-		target = event.position
+		target = to_local(event.position)
 		has_target = true
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			if primary_touch == -1:
 				primary_touch = event.index
 				pointer_down = true
-				aim(event.position)
+				aim(to_local(event.position))
 			else: bark()
 		elif event.index == primary_touch:
 			primary_touch = -1
 			pointer_down = false
 	if event is InputEventScreenDrag and event.index == primary_touch:
-		target = level.grid.get_point_position(level.nearest_cell(event.position))
+		target = level.grid.get_point_position(level.nearest_cell(to_local(event.position)))
 		has_target = true
 
 func aim(p: Vector2) -> void:

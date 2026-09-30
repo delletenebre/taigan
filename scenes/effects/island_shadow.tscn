@@ -1,0 +1,13 @@
+[gd_scene load_steps=5 format=3]
+[ext_resource type="Texture2D" path="res://assets/art/island-shadow-source.png" id="1"]
+[ext_resource type="Shader" path="res://assets/shaders/island_shadow.gdshader" id="2"]
+[ext_resource type="Texture2D" path="res://assets/art/pasture-cutout.png" id="3"]
+[sub_resource type="ShaderMaterial" id="Shadow"]
+shader = ExtResource("2")
+shader_parameter/silhouette = ExtResource("3")
+[node name="IslandShadow" type="Sprite2D"]
+texture_filter = 4
+material = SubResource("Shadow")
+texture = ExtResource("1")
+centered = false
+scale = Vector2(0.8703507, 0.8708134)

@@ -1,0 +1,7 @@
+Tool: built-in image_gen (not CLI).
+Saved asset: /Users/user/projects/games/taigan/assets/art/felt-underlay.png
+
+Final generation prompt:
+Create a single seamless square texture of warm natural beige needle-felt wool for the background of a handmade felt miniature game. Straight overhead orthographic macro view of one flat continuous sheet. Dense soft short tangled wool fibres, gently mottled oatmeal/tan beige matching a warm sand-coloured felt tabletop, fine tactile dry wool detail. Very even diffuse illumination across the entire surface, no directional shading, no vignette, no focus falloff. Quiet uniform low contrast at large scale. Absolutely no woven grid, linen weave, seams, bands, stripes, lines, folds, gradients, visible tiles, objects, decorations, writing, islands, or borders. Full bleed edge to edge material swatch, 2048 x 2048.
+
+In-game presentation: uniform fibre scale, 65% texture contrast, linear mipmap filtering. The existing island artwork remains the original texture with a feathered outer mesh boundary.
