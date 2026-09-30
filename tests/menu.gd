@@ -50,6 +50,17 @@ func run(menu: Control) -> void:
 		game.set_physics_process(false)
 		var config: Dictionary = Session.LEVELS[index]
 		check(game.sheep.size() == config.sheep and game.evening_seconds == config.day and game.wolf_interval == config.interval, "level parameters change the actual round: %d" % index)
+		var bark_button: Button = game.hud.get_node("Bark")
+		await tap(bark_button, menu)
+		game._physics_process(0.0)
+		await get_tree().create_timer(0.22).timeout
+		check(game.cooldown > 0 and bark_button.disabled and bark_button.get_node("Cooldown").visible and float(bark_button.get_node("Wool").material.get_shader_parameter("inactive")) > 0.99, "native bark tap starts cooldown with visibly inactive felt button")
+		var remaining: float = game.cooldown
+		await tap(bark_button, menu)
+		check(game.cooldown == remaining and not game.has_target and not game.pointer_down, "cooldown button blocks repeat bark and movement from native touch")
+		game._physics_process(3.0)
+		await get_tree().create_timer(0.22).timeout
+		check(not bark_button.disabled and not bark_button.get_node("Cooldown").visible and float(bark_button.get_node("Wool").material.get_shader_parameter("inactive")) < 0.01, "cooldown expiry restores the ready felt button")
 		await tap(game.hud.get_node("Pause"), menu)
 		check(game.paused and not game.has_target and not game.pointer_down, "native pause tap freezes gameplay without moving the dog")
 		game.hud.get_node("Overlay/Card/Settings").pressed.emit()

@@ -51,4 +51,6 @@ Godot --path . -- --capture
 
 Главное меню: `scripts/ui/menu.gd`; общие войлочные кнопки: `scripts/ui/felt_ui.gd`; языки: `assets/localization/ui.json`. Фон и кнопки созданы встроенным image_gen, запросы: `docs/menu-art-prompts.md`. Просмотр меню, трёх языков, паузы и результата: `Godot --path . --script res://scripts/dev/menu_review.gd`.
 
+Войлочные цифры: `scripts/ui/felt_number.gd`, тёмный и светлый атласы `assets/ui/felt-digits-{dark,light}.png`. После замены атласов пересчитать границы символов: `Godot --headless --path . --script res://tools/build_felt_digit_metrics.gd`. Просмотр счётчиков и кнопки лая, включая мобильный экран: `Godot --path . --script res://scripts/dev/felt_hud_review.gd`.
+
 `tools/build_scenes.py` — первоначальный генератор `.tscn`. Все готовые сцены уже сохранены и редактируются в Godot. Повторный запуск генератора перезапишет ручные правки сцен.

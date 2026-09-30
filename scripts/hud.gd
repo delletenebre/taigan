@@ -11,9 +11,12 @@ var result_total := 12
 var result_lost := 0
 var current_values: Array = [0, 12, 60.0, 0.0, 0, 0.0]
 var settings_window: Control
+var bark_state_tween: Tween
+var bark_recharging := false
 
 func _ready() -> void:
 	build_pause_ui()
+	build_felt_counters()
 	$WolfTimer/Skip.pressed.connect(func(): timer_skip_requested.emit())
 	$Pause.pressed.connect(func(): pause_requested.emit())
 	$Bark.pressed.connect(func(): bark_requested.emit())
@@ -31,20 +34,37 @@ func build_pause_ui() -> void:
 	$Pause.size = Vector2(116, 116)
 	FeltUI.icon($Pause, preload("res://assets/ui/pause-button-felt.png"), Rect2(0, 0, 116, 116))
 	FeltUI.animate_button($Pause)
-	$SheepCount.size.y = 92
-	$SheepCount.get_node("Icon").size.y = 86
+	$SheepCount.size = Vector2(260, 104)
+	$SheepCount.get_node("Icon").size.y = 98
 	$SheepCount.get_node("Text").size.y = 85
-	$WolfTimer.position.x = 477
-	$WolfTimer.size.y = 92
-	$WolfTimer.get_node("Icon").position.y = 13
+	$WolfTimer.position.x = 416
+	$WolfTimer.size = Vector2(260, 104)
+	$WolfTimer.get_node("Icon").position.y = 20
 	$WolfTimer.get_node("Text").size.y = 85
 	var old_bark := $Bark
 	remove_child(old_bark)
 	old_bark.queue_free()
-	var bark_button := FeltUI.button(self, "", Rect2(678, 1246, 126, 114), Callable())
+	var bark_button := FeltUI.button(self, "", Rect2(664, 1225, 140, 140), Callable())
 	bark_button.name = "Bark"
 	move_child(bark_button, $Overlay.get_index())
-	bark_button.add_theme_font_size_override("font_size", 31)
+	bark_button.add_theme_font_size_override("font_size", 35)
+	var old_surface := bark_button.get_child(0)
+	bark_button.remove_child(old_surface)
+	old_surface.queue_free()
+	var surface := FeltUI.icon(bark_button, preload("res://assets/ui/bark-button-felt.png"), Rect2(0, 0, 140, 140))
+	surface.name = "Wool"
+	surface.show_behind_parent = true
+	var state_material := ShaderMaterial.new()
+	state_material.shader = preload("res://assets/shaders/felt_button_state.gdshader")
+	surface.material = state_material
+	var cooldown_digits := FeltNumber.new()
+	cooldown_digits.name = "Cooldown"
+	cooldown_digits.light = true
+	cooldown_digits.position = Vector2(24, 45)
+	cooldown_digits.size = Vector2(92, 48)
+	cooldown_digits.width_template = "0.0"
+	cooldown_digits.hide()
+	bark_button.add_child(cooldown_digits)
 	var old := $Overlay/Card
 	$Overlay.remove_child(old)
 	old.queue_free()
@@ -99,10 +119,10 @@ func update_values(count: int, total: int, seconds: float, cooldown: float, lost
 	current_values = [count, total, seconds, cooldown, lost, night]
 	$SheepCount/Text.text = "%d/%d" % [count, total]
 	$WolfTimer/Text.text = "%02d:%02d" % [int(ceil(seconds)) / 60, int(ceil(seconds)) % 60]
-	$WolfTimer/Text.add_theme_color_override("font_color", Color("743b27") if seconds <= 10 else Color("402617"))
+	$SheepCount/Digits.text = $SheepCount/Text.text
+	$WolfTimer/Digits.text = $WolfTimer/Text.text
 	update_day_icon(night)
-	$Bark.disabled = cooldown > 0
-	$Bark.text = "%.1f" % cooldown if cooldown > 0 else Session.t("bark")
+	update_bark_button(cooldown)
 
 func update_day_icon(night: float) -> void:
 	var amount := clampf(night, 0.0, 1.0)
@@ -156,3 +176,27 @@ func blocks_touch(point: Vector2) -> bool:
 	for control in [$Pause, $Bark, $WolfTimer/Skip]:
 		if control.is_visible_in_tree() and Rect2(Vector2.ZERO, control.size).has_point(control.get_global_transform_with_canvas().affine_inverse() * point): return true
 	return false
+
+func build_felt_counters() -> void:
+	for panel in [$SheepCount, $WolfTimer]:
+		panel.get_node("Text").hide()
+		var digits := FeltNumber.new()
+		digits.name = "Digits"
+		digits.position = Vector2(82, 24)
+		digits.size = Vector2(160, 58)
+		digits.width_template = "00/00" if panel == $SheepCount else "00:00"
+		panel.add_child(digits)
+
+func update_bark_button(cooldown: float) -> void:
+	var inactive := cooldown > 0.0
+	$Bark.disabled = inactive
+	$Bark.text = "" if inactive else Session.t("bark")
+	$Bark/Cooldown.visible = inactive
+	$Bark/Cooldown.text = "%.1f" % cooldown
+	if inactive == bark_recharging: return
+	bark_recharging = inactive
+	if bark_state_tween: bark_state_tween.kill()
+	bark_state_tween = create_tween()
+	var material: ShaderMaterial = $Bark/Wool.material
+	var previous: Variant = material.get_shader_parameter("inactive")
+	bark_state_tween.tween_method(func(amount: float): material.set_shader_parameter("inactive", amount), float(previous) if previous != null else 0.0, 1.0 if inactive else 0.0, 0.18)
