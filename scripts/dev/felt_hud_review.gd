@@ -22,6 +22,7 @@ func run() -> void:
 	game.set_physics_process(false)
 	game.hud.update_values(0,12,60,0,0)
 	await capture("res://docs/felt-hud-day.png")
+	viewport.get_texture().get_image().get_region(Rect2i(0,0,819,145)).save_png("res://docs/felt-counter-day-preview.png")
 	game.level.set_night(1.0)
 	game.hud.update_values(12,12,0,1.1,0,1.0)
 	await capture("res://docs/felt-hud-night-cooldown.png")

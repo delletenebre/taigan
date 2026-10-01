@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=17 format=3]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/art/felt-panel.png" id="2"]
 [ext_resource type="FontFile" path="res://assets/fonts/PT_Sans-Web-Regular.ttf" id="3"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/sun-felt.png" id="6"]
 [ext_resource type="Texture2D" path="res://assets/ui/moon-felt.png" id="7"]
 [ext_resource type="Shader" path="res://assets/shaders/hud_light_felt.gdshader" id="8"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud-counter-felt.png" id="9"]
 [sub_resource type="ShaderMaterial" id="LightFelt"]
 shader = ExtResource("8")
 [sub_resource type="AtlasTexture" id="PanelTexture"]
@@ -42,13 +43,13 @@ mouse_filter = 2
 theme = SubResource("Theme")
 script = ExtResource("1")
 [node name="SheepCount" type="TextureRect" parent="."]
-material = SubResource("LightFelt")
+texture_filter = 4
 layout_mode = 0
 offset_left = 18.0
 offset_top = 17.0
 offset_right = 226.0
 offset_bottom = 85.0
-texture = SubResource("PanelTexture")
+texture = ExtResource("9")
 expand_mode = 1
 stretch_mode = 0
 mouse_filter = 2
@@ -74,13 +75,13 @@ theme_override_font_sizes/font_size = 39
 vertical_alignment = 1
 mouse_filter = 2
 [node name="WolfTimer" type="TextureRect" parent="."]
-material = SubResource("LightFelt")
+texture_filter = 4
 layout_mode = 0
 offset_left = 522.0
 offset_top = 17.0
 offset_right = 722.0
 offset_bottom = 85.0
-texture = SubResource("PanelTexture")
+texture = ExtResource("9")
 expand_mode = 1
 stretch_mode = 0
 mouse_filter = 2
